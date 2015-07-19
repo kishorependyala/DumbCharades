@@ -84,7 +84,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/colors"
         android:fontFamily="serif"
-        android:text="startGame"
+        android:text="Start Game"
         android:textStyle="italic" />
 
 </RelativeLayout>
