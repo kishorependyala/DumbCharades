@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.teabreaktechnology.dumcharades">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.teabreaktechnology.dumcharades.HomeScreenActivity"
+            android:label="@string/app_name">
+        <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.teabreaktechnology.dumcharades.CreateTeamsActivity"
+            android:label="@string/title_activity_create_teams" />
+        <activity
+            android:name="com.teabreaktechnology.dumcharades.GamePlayActivity"
+            android:label="@string/title_activity_game_play" />
+    </application>
+
+</manifest>
