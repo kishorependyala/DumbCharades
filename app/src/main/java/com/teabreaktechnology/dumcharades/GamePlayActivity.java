@@ -139,12 +139,12 @@ public class GamePlayActivity extends Activity {
         countDownTimer = new CountDownTimer(currentTimeValue.get(), 1000) {
             public void onTick(long millisUntilFinished) {
                 currentTimeValue.set(millisUntilFinished);
-                timerTextView.setText("seconds remaining: " + millisUntilFinished / 1000);
+                timerTextView.setText("Seconds remaining: " + millisUntilFinished / 1000);
                 currentTimeValue.set(millisUntilFinished);
             }
 
             public void onFinish() {
-                timerTextView.setText("done!");
+                timerTextView.setText("Done!");
 
                 GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
                 gameCache.addGamePlay(gamePlay);
