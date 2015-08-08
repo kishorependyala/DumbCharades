@@ -39,10 +39,10 @@ public class CreateTeamsActivity extends Activity {
         final EditText team2Player1EditText = (EditText) findViewById(R.id.team2Player1editText);
         final EditText team2Player2EditText = (EditText) findViewById(R.id.team2Player2editText);
 
-        team1Player1EditText.setText("Madhu");
-        team1Player2EditText.setText("Raheel");
-        team2Player1EditText.setText("Pavan");
-        team2Player2EditText.setText("Harish");
+        team1Player1EditText.setText("Player 1");
+        team1Player2EditText.setText("Player 2");
+        team2Player1EditText.setText("Player 3");
+        team2Player2EditText.setText("Player 4");
 
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
