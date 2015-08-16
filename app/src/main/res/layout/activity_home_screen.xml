@@ -86,6 +86,24 @@
             android:textStyle="italic" />
 
         <TextView
+            android:id="@+id/LevelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="Easy/Hard"
+            android:textStyle="italic"
+
+            />
+
+        <Spinner
+            android:id="@+id/difficultyLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:textStyle="italic" />
+
+
+        <TextView
             android:id="@+id/duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

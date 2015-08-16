@@ -12,6 +12,9 @@ public class Movie {
     private GameCache.Language language;
     private int year;
     private String cast;
+    private String director;
+    private int level;
+    private String genre;
 
     public Movie(Builder builder) {
         this.movieId = builder.movieId;
@@ -19,6 +22,10 @@ public class Movie {
         this.language = builder.language;
         this.year = builder.year;
         this.cast = builder.cast;
+        this.director = builder.director;
+        this.level = builder.level;
+        this.genre = builder.genre;
+
     }
 
     @Override
@@ -29,6 +36,9 @@ public class Movie {
                 .append(movieName).append(",")
                 .append(language).append(",")
                 .append(year).append(",")
+                .append(genre).append(",")
+                .append(director).append(",")
+                .append(level).append(",")
                 .append(cast).append("}");
 
         return sb.toString();
@@ -42,6 +52,30 @@ public class Movie {
         return movieName;
     }
 
+    public GameCache.Language getLanguage() {
+        return language;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public String getCast() {
+        return cast;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
     public static class Builder {
 
         private int movieId;
@@ -49,6 +83,9 @@ public class Movie {
         private GameCache.Language language;
         private int year;
         private String cast;
+        private String director;
+        private int level;
+        private String genre;
 
 
         public Builder movieId(int movieId) {
@@ -57,7 +94,7 @@ public class Movie {
         }
 
         public Builder language(GameCache.Language language) {
-            this.movieId = movieId;
+            this.language = language;
             return this;
         }
 
@@ -74,6 +111,21 @@ public class Movie {
 
         public Builder movieName(String movieName) {
             this.movieName = movieName;
+            return this;
+        }
+
+        public Builder genre(String genre) {
+            this.genre = genre;
+            return this;
+        }
+
+        public Builder director(String director) {
+            this.director = director;
+            return this;
+        }
+
+        public Builder level(int level) {
+            this.level = level;
             return this;
         }
 

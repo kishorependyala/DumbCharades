@@ -39,9 +39,10 @@ public class GamePlayActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
-        final GameCache gameCache = GameCache.getInstance();
+        final GameCache gameCache = GameCache.getInstance(false);
         Bundle extras = getIntent().getExtras();
         final String language = extras.getString("language");
+        final Integer difficultyLevel = extras.getInt("difficultyLevel");
         try {
             String fileToLoad = null;
             if ("hindi".equalsIgnoreCase(language)) {
@@ -50,7 +51,7 @@ public class GamePlayActivity extends Activity {
                 fileToLoad = "movies-telugu.csv";
             }
             InputStream in = this.getAssets().open(fileToLoad);
-            gameCache.run(in);
+            gameCache.run(in, difficultyLevel);
         } catch (Exception e) {
 
         }

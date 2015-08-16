@@ -42,6 +42,14 @@ public class HomeScreenActivity extends Activity {
         ArrayAdapter<String> languageAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
         languageSpinner.setAdapter(languageAdapter);
 
+        String[] difficultyLevelForDropDown = new String[]{"Easy", "Hard"};
+        final int[] difficultyLevel = new int[]{2, 1};
+
+        final Spinner difficultyLevelSpinner = (Spinner) findViewById(R.id.difficultyLevel);
+        ArrayAdapter<String> difficultyLevelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, difficultyLevelForDropDown);
+        difficultyLevelSpinner.setAdapter(difficultyLevelAdapter);
+
+
         createGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,8 +65,12 @@ public class HomeScreenActivity extends Activity {
                 String timeIntervalForEachPlay = timeIntervalInSeconds[selectedId];
                 String language = (String) languageSpinner.getSelectedItem();
 
+                int selectedDifficultyLevelId = difficultyLevelSpinner.getSelectedItemPosition();
+                int selectedDifficultyLevel = difficultyLevel[selectedDifficultyLevelId];
+
                 createTeamsIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
                 createTeamsIntent.putExtra("language", language);
+                createTeamsIntent.putExtra("difficultyLevel", selectedDifficultyLevel);
                 startActivity(createTeamsIntent);
             }
         });

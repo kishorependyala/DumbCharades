@@ -26,6 +26,7 @@ public class CreateTeamsActivity extends Activity {
         final String team2Name = extras.getString("team2Name");
         final String language = extras.getString("language");
         final String timeIntervalForEachPlay = extras.getString("timeIntervalForEachPlay");
+        final Integer difficultyLevel = extras.getInt("difficultyLevel");
 
         TextView team1TextView = (TextView) findViewById(R.id.team1NameTextView);
         TextView team2TextView = (TextView) findViewById(R.id.team2NameTextView);
@@ -53,7 +54,7 @@ public class CreateTeamsActivity extends Activity {
                 String team2Player1Name = team2Player1EditText.getText().toString();
                 String team2Player2Name = team2Player2EditText.getText().toString();
 
-                GameCache gameCache = GameCache.getInstance();
+                GameCache gameCache = GameCache.getInstance(true);
                 int team1Id = gameCache.addTeam(team1Name);
                 int team2Id = gameCache.addTeam(team2Name);
                 int player1Id = gameCache.addPlayer(team1Player1Name);
@@ -70,6 +71,7 @@ public class CreateTeamsActivity extends Activity {
                 startGameIntent.putExtra("gameId", gameId + "");
                 startGameIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
                 startGameIntent.putExtra("language", language);
+                startGameIntent.putExtra("difficultyLevel", difficultyLevel);
                 startActivity(startGameIntent);
 
             }

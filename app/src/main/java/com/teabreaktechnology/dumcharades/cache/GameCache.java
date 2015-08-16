@@ -5,6 +5,7 @@ import com.teabreaktechnology.dumcharades.bean.GamePlay;
 import com.teabreaktechnology.dumcharades.bean.Movie;
 import com.teabreaktechnology.dumcharades.bean.Player;
 import com.teabreaktechnology.dumcharades.bean.Team;
+import com.teabreaktechnology.util.StringUtil;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -46,34 +47,13 @@ public class GameCache {
 
     }
 
-    ;
-
-    public static final GameCache getInstance() {
-        if (gameCache == null) {
-            //  synchronized (gameCache) {
-            if (gameCache == null) {
-                gameCache = new GameCache();
-                // mockUpMovieNames();
-            }
-            // }
+    public static final GameCache getInstance(boolean initialize) {
+        if (gameCache == null || initialize) {
+            gameCache = new GameCache();
         }
         return gameCache;
     }
 
-    public static void mockUpMovieNames() {
-
-        // getInstance().addMovie("Darr",Language.HINDI,2014,"");
-        /*
-        getInstance().addMovie("Baaziger");
-        getInstance().addMovie("Dil");
-        getInstance().addMovie("PK");
-        getInstance().addMovie("I");
-        getInstance().addMovie("DDLJ");
-        getInstance().addMovie("Lagaan");
-        getInstance().addMovie("Don");
-        getInstance().addMovie("Billa");
-        getInstance().addMovie("Legend");*/
-    }
 
     public static void test(List<Integer> moviesPlayList) {
         while (true) {
@@ -93,7 +73,11 @@ public class GameCache {
         }
     }
 
-    public void run(InputStream in) {
+    /*
+        Reads input csv movie file and creates a map of movie names
+        Language,Year,Title,Genre,Director,Cast,Level
+     */
+    public void run(InputStream in, int gameLevel) {
 
         BufferedReader br = null;
         String line = "";
@@ -107,17 +91,49 @@ public class GameCache {
                 if (line == null) {
                     break;
                 }
+                if (line.startsWith("#")) {
+                    System.out.println("line comment");
+                    continue;
+                }
                 // use comma as separator
-                String[] tokens = line.split(cvsSplitBy);
+                String[] tokens = StringUtil.split(line);
+                //line.split(cvsSplitBy);
                 if (tokens.length < 4) {
                     System.out.println("Breaking at line " + line);
                     break;
                 }
-                String movieName = tokens[2];
-                String cast = tokens[3];
-                Language language = Language.getLanguage(tokens[0]);
-                int year = 0;//new Integer(tokens[0]).intValue();
-                Movie movie = addMovie(movieName, language, year, cast);
+                String levelString = tokens[5];
+                int level = 1; //Setting default level to easy
+                if (levelString != null && levelString.length() != 0) {
+                    level = new Integer(levelString);
+                }
+
+                String movieName = tokens[1];
+                if (level != gameLevel) {
+                    System.out.println("Requested game level " + gameLevel + " level " + level + " ignored movie " + movieName);
+                    continue;
+                }
+
+                //Language language = Language.getLanguage(tokens[0]);
+                int year = new Integer(tokens[0]).intValue();
+
+                String genre = tokens[2];
+                String director = tokens[3];
+                String cast = tokens[4];
+
+                Integer movieId = movieCounter.getAndIncrement();
+
+                Movie movie = new Movie.Builder()
+                        .movieId(movieId)
+                        .year(year)
+                        .movieName(movieName)
+                                //.language(language)
+                        .genre(genre)
+                        .director(director)
+                        .cast(cast)
+                        .level(level)
+                        .build();
+                movieMap.put(movieId, movie);
                 System.out.println(" " + movie);
 
             }
@@ -140,16 +156,6 @@ public class GameCache {
         System.out.println("Done");
     }
 
-    private Movie addMovie(String movieName, Language language, Integer year, String cast) {
-        Integer movieId = movieCounter.getAndIncrement();
-        Movie movie = new Movie.Builder().movieId(movieId).movieName(movieName)
-                .language(language)
-                .year(year)
-                .cast(cast)
-                .build();
-        movieMap.put(movieId, movie);
-        return movie;
-    }
 
     @Override
     public String toString() {
