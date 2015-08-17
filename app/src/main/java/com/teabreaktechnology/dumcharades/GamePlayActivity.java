@@ -1,6 +1,7 @@
 package com.teabreaktechnology.dumcharades;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
@@ -33,6 +34,7 @@ public class GamePlayActivity extends Activity {
     Button nextPlayButton;
     Button correctButton;
     int showMovie = 0;
+    MediaPlayer mp;
 
 
     @Override
@@ -142,6 +144,21 @@ public class GamePlayActivity extends Activity {
                 currentTimeValue.set(millisUntilFinished);
                 timerTextView.setText("Seconds remaining: " + millisUntilFinished / 1000);
                 currentTimeValue.set(millisUntilFinished);
+                long timeLeft = millisUntilFinished / 1000;
+
+                if(timeLeft == 15)
+                {
+                    playAlertSound(R.raw.beep01);
+                }
+                if (timeLeft <= 5 && timeLeft >= 2)
+                {
+                    playAlertSound(R.raw.beep01);
+                }
+                if(timeLeft == 1){
+                    playAlertSound(R.raw.beep02);
+                }
+
+
             }
 
             public void onFinish() {
@@ -152,6 +169,20 @@ public class GamePlayActivity extends Activity {
                 setNextPlayReadyState(gameCache, gameId);
             }
         };
+    }
+
+    private void playAlertSound(int sound)
+    {
+        MediaPlayer mp = MediaPlayer.create(getBaseContext(), sound);
+        mp.start();
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+
+        });
+
     }
 
 
@@ -186,7 +217,6 @@ public class GamePlayActivity extends Activity {
         correctButton.setEnabled(true);
         nextPlayButton.setEnabled(true);
         countDownTimer.start();
-
     }
 
 
