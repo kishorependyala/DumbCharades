@@ -41,6 +41,9 @@ public class GamePlayActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         final GameCache gameCache = GameCache.getInstance(false);
         Bundle extras = getIntent().getExtras();
         final String language = extras.getString("language");
