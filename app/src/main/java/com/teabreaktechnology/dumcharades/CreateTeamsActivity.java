@@ -2,6 +2,7 @@ package com.teabreaktechnology.dumcharades;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,9 +48,13 @@ public class CreateTeamsActivity extends Activity {
         team2Player1EditText.setText("Player 3");
         team2Player2EditText.setText("Player 4");
 
+
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
+
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mp.start();
                 Intent startGameIntent = new Intent(CreateTeamsActivity.this, GamePlayActivity.class);
                 String team1Player1Name = team1Player1EditText.getText().toString();
                 String team1Player2Name = team1Player2EditText.getText().toString();

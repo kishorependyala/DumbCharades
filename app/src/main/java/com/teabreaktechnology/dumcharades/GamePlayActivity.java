@@ -82,12 +82,14 @@ public class GamePlayActivity extends Activity {
         nextPlayButton = (Button) findViewById(R.id.nextPlayButton);
         correctButton = (Button) findViewById(R.id.correctButton);
 
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
 
         startTimer(gameCache, gameId, currentTimeValue);
         setNextPlayReadyState(gameCache, gameId);
         nextPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mp.start();
                 GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
                 gameCache.addGamePlay(gamePlay);
                 scoreBoardVIew.setText(gameCache.getGameStatus());
@@ -106,6 +108,7 @@ public class GamePlayActivity extends Activity {
         correctButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mp.start();
                 GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(1).build();
                 gameCache.addGamePlay(gamePlay);
                 scoreBoardVIew.setText(gameCache.getGameStatus());
@@ -119,6 +122,7 @@ public class GamePlayActivity extends Activity {
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mp.start();
                 nextPlayButton.setEnabled(false);
                 restartButton.setEnabled(true);
                 correctButton.setEnabled(false);
@@ -131,6 +135,7 @@ public class GamePlayActivity extends Activity {
         restartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mp.start();
                 nextPlayButton.setEnabled(true);
                 restartButton.setEnabled(false);
                 correctButton.setEnabled(true);

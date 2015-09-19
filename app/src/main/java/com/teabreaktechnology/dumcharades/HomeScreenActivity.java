@@ -2,6 +2,7 @@ package com.teabreaktechnology.dumcharades;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,9 +51,13 @@ public class HomeScreenActivity extends Activity {
         difficultyLevelSpinner.setAdapter(difficultyLevelAdapter);
 
 
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
+
+
         createGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mp.start();
                 Intent createTeamsIntent = new Intent(HomeScreenActivity.this, CreateTeamsActivity.class);
 
                 String team2Name = team2EditText.getText().toString();
