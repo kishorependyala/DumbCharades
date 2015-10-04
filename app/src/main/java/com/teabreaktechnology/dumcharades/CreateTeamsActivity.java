@@ -1,20 +1,26 @@
 package com.teabreaktechnology.dumcharades;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.teabreaktechnology.dumcharades.cache.GameCache;
 
 
 public class CreateTeamsActivity extends Activity {
+    // Parent view for all rows and the add button.
+    private LinearLayout mContainerView;
+    public String PlayerNames[];
+    public int i = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +39,17 @@ public class CreateTeamsActivity extends Activity {
 
         TextView team1TextView = (TextView) findViewById(R.id.team1NameTextView);
         TextView team2TextView = (TextView) findViewById(R.id.team2NameTextView);
+
+        Button addteam = (Button) findViewById(R.id.add);
         Button startGameButton = (Button) findViewById(R.id.startGameButton);
 
         team1TextView.setText(team1Name);
         team2TextView.setText(team2Name);
 
-        final EditText team1Player1EditText = (EditText) findViewById(R.id.team1Player1editText);
-        final EditText team1Player2EditText = (EditText) findViewById(R.id.team1Player2editText);
-        final EditText team2Player1EditText = (EditText) findViewById(R.id.team2Player1editText);
-        final EditText team2Player2EditText = (EditText) findViewById(R.id.team2Player2editText);
+        mContainerView = (LinearLayout) findViewById(R.id.parentView);
 
-        team1Player1EditText.setText("Player 1");
-        team1Player2EditText.setText("Player 2");
-        team2Player1EditText.setText("Player 3");
-        team2Player2EditText.setText("Player 4");
+
+        inflateEditRow("player " + i);
 
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
@@ -56,24 +59,13 @@ public class CreateTeamsActivity extends Activity {
             public void onClick(View v) {
                 mp.start();
                 Intent startGameIntent = new Intent(CreateTeamsActivity.this, GamePlayActivity.class);
-                String team1Player1Name = team1Player1EditText.getText().toString();
-                String team1Player2Name = team1Player2EditText.getText().toString();
-                String team2Player1Name = team2Player1EditText.getText().toString();
-                String team2Player2Name = team2Player2EditText.getText().toString();
 
                 GameCache gameCache = GameCache.getInstance(true);
                 int team1Id = gameCache.addTeam(team1Name);
                 int team2Id = gameCache.addTeam(team2Name);
-                int player1Id = gameCache.addPlayer(team1Player1Name);
-                int player2Id = gameCache.addPlayer(team1Player2Name);
-                int player3Id = gameCache.addPlayer(team2Player1Name);
-                int player4Id = gameCache.addPlayer(team2Player2Name);
+
                 int gameId = 1;
 
-                gameCache.addPlayer(gameId, team1Id, player1Id);
-                gameCache.addPlayer(gameId, team1Id, player2Id);
-                gameCache.addPlayer(gameId, team2Id, player3Id);
-                gameCache.addPlayer(gameId, team2Id, player4Id);
 
                 startGameIntent.putExtra("gameId", gameId + "");
                 startGameIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
@@ -86,25 +78,32 @@ public class CreateTeamsActivity extends Activity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_teams, menu);
-        return true;
+    public void onAddNewClicked(View v) {
+        i++;
+        // Inflate a new row and hide the button self.
+        inflateEditRow("player " + i);
+
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    // onClick handler for the "-" button of each row
+    public void onDeleteClicked(View v) {
+        i--;
+        // remove the row by calling the getParent on button
+        mContainerView.removeView((View) v.getParent());
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+    // Helper for inflating a row
+    private void inflateEditRow(String name) {
 
-        return super.onOptionsItemSelected(item);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View rowView = inflater.inflate(R.layout.row, null);
+        final ImageButton deleteButton = (ImageButton) rowView
+                .findViewById(R.id.delete);
+        final EditText editText = (EditText) rowView
+                .findViewById(R.id.editText);
+
+        editText.setText(name);
+        // Inflate at the end of all rows but before the "Add new" button
+        mContainerView.addView(rowView, mContainerView.getChildCount() - 1);
     }
 }
