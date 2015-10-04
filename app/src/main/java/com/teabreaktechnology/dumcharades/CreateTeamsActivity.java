@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,10 +16,12 @@ import com.teabreaktechnology.dumcharades.cache.GameCache;
 
 
 public class CreateTeamsActivity extends Activity {
-    // Parent view for all rows and the add button.
-    private LinearLayout mContainerView;
-    public String PlayerNames[];
-    public int i = 1;
+
+
+    public int team1Count = 1;
+    public int team2Count = 1;
+    private LinearLayout team1LinearLayout;
+    private LinearLayout team2LinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +41,16 @@ public class CreateTeamsActivity extends Activity {
         TextView team1TextView = (TextView) findViewById(R.id.team1NameTextView);
         TextView team2TextView = (TextView) findViewById(R.id.team2NameTextView);
 
-        Button addteam = (Button) findViewById(R.id.add);
         Button startGameButton = (Button) findViewById(R.id.startGameButton);
 
         team1TextView.setText(team1Name);
         team2TextView.setText(team2Name);
 
-        mContainerView = (LinearLayout) findViewById(R.id.parentView);
+        team1LinearLayout = (LinearLayout) findViewById(R.id.team1LinearLayout);
+        team2LinearLayout = (LinearLayout) findViewById(R.id.team2LinearLayout);
 
-
-        inflateEditRow("player " + i);
-
+        inflateEditRow("player " + team1Count, team1LinearLayout);
+        inflateEditRow("player " + team2Count, team2LinearLayout);
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
 
@@ -61,11 +61,29 @@ public class CreateTeamsActivity extends Activity {
                 Intent startGameIntent = new Intent(CreateTeamsActivity.this, GamePlayActivity.class);
 
                 GameCache gameCache = GameCache.getInstance(true);
+
                 int team1Id = gameCache.addTeam(team1Name);
                 int team2Id = gameCache.addTeam(team2Name);
-
                 int gameId = 1;
 
+
+                for (int i = 0; i < team1LinearLayout.getChildCount() - 1; i++) {
+                    View childAt = team1LinearLayout.getChildAt(i);
+                    EditText editText = (EditText) childAt.findViewById(R.id.editText);
+                    String s = editText.getText().toString();
+                    System.out.println("player name " + s + " " + s.length());
+                    int player1Id = gameCache.addPlayer(s);
+                    gameCache.addPlayer(gameId, team1Id, player1Id);
+                }
+
+                for (int i = 0; i < team2LinearLayout.getChildCount() - 1; i++) {
+                    View childAt = team2LinearLayout.getChildAt(i);
+                    EditText editText = (EditText) childAt.findViewById(R.id.editText);
+                    String s = editText.getText().toString();
+                    System.out.println("player name " + s + " " + s.length());
+                    int player1Id = gameCache.addPlayer(s);
+                    gameCache.addPlayer(gameId, team2Id, player1Id);
+                }
 
                 startGameIntent.putExtra("gameId", gameId + "");
                 startGameIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
@@ -78,32 +96,39 @@ public class CreateTeamsActivity extends Activity {
     }
 
 
-    public void onAddNewClicked(View v) {
-        i++;
-        // Inflate a new row and hide the button self.
-        inflateEditRow("player " + i);
+    public void onAddForTeam1Clicked(View v) {
+        team1Count++;
+        inflateEditRow("player " + team1Count, team1LinearLayout);
+    }
+
+    public void onAddForTeam2Clicked(View v) {
+        team2Count++;
+        inflateEditRow("player " + team2Count, team2LinearLayout);
 
     }
 
-    // onClick handler for the "-" button of each row
-    public void onDeleteClicked(View v) {
-        i--;
-        // remove the row by calling the getParent on button
-        mContainerView.removeView((View) v.getParent());
+    public void onDeleteForTeam2Clicked(View v) {
+        team2Count--;
+        team2LinearLayout.removeView((View) v.getParent());
     }
 
-    // Helper for inflating a row
-    private void inflateEditRow(String name) {
+    public void onDeleteForTeam1Clicked(View v) {
+        team1Count--;
+        team1LinearLayout.removeView((View) v.getParent());
+    }
+
+    private void inflateEditRow(String name, LinearLayout linearLayout) {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.row, null);
-        final ImageButton deleteButton = (ImageButton) rowView
-                .findViewById(R.id.delete);
-        final EditText editText = (EditText) rowView
-                .findViewById(R.id.editText);
+        View rowView = null;
+        if (linearLayout == team1LinearLayout) {
+            rowView = inflater.inflate(R.layout.team1row, null);
+        } else {
+            rowView = inflater.inflate(R.layout.team2row, null);
+        }
+        final EditText editText = (EditText) rowView.findViewById(R.id.editText);
 
         editText.setText(name);
-        // Inflate at the end of all rows but before the "Add new" button
-        mContainerView.addView(rowView, mContainerView.getChildCount() - 1);
+        linearLayout.addView(rowView, linearLayout.getChildCount() - 1);
     }
 }

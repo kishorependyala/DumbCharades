@@ -154,15 +154,13 @@ public class GamePlayActivity extends Activity {
                 currentTimeValue.set(millisUntilFinished);
                 long timeLeft = millisUntilFinished / 1000;
 
-                if(timeLeft == 15)
-                {
+                if (timeLeft == 15) {
                     playAlertSound(R.raw.beep01);
                 }
-                if (timeLeft <= 5 && timeLeft >= 2)
-                {
+                if (timeLeft <= 5 && timeLeft >= 2) {
                     playAlertSound(R.raw.beep01);
                 }
-                if(timeLeft == 1){
+                if (timeLeft == 1) {
                     playAlertSound(R.raw.beep02);
                 }
 
@@ -179,8 +177,7 @@ public class GamePlayActivity extends Activity {
         };
     }
 
-    private void playAlertSound(int sound)
-    {
+    private void playAlertSound(int sound) {
         MediaPlayer mp = MediaPlayer.create(getBaseContext(), sound);
         mp.start();
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {

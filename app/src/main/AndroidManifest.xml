@@ -20,11 +20,11 @@
         <activity
             android:name="com.teabreaktechnology.dumcharades.CreateTeamsActivity"
             android:label="Dumbcharades Create Teams"
-            android:parentActivityName=".HomeScreenActivity"/>
+            android:parentActivityName=".HomeScreenActivity" />
         <activity
             android:name="com.teabreaktechnology.dumcharades.GamePlayActivity"
             android:label="Dumbcharades Gameplay"
-            android:parentActivityName=".CreateTeamsActivity"/>
+            android:parentActivityName=".CreateTeamsActivity" />
     </application>
 
 </manifest>

@@ -20,25 +20,18 @@
         android:textStyle="italic" />
 
     <LinearLayout
-        android:id="@+id/parentView"
+        android:id="@+id/team1LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/add"
+        <ImageButton
+            android:id="@+id/deleteForTeam2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/colors"
-            android:fontFamily="serif"
-            android:gravity="center_vertical|left"
-            android:onClick="onAddNewClicked"
-            android:paddingLeft="5dp"
-            android:text="Add new"
-            android:textStyle="italic" />
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/add"
+            android:onClick="onAddForTeam1Clicked" />
 
     </LinearLayout>
 
@@ -53,6 +46,36 @@
         android:text="Team 2 name"
         android:textStyle="italic" />
 
+
+    <LinearLayout
+        android:id="@+id/team2LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/deleteForTeam2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/add"
+            android:onClick="onAddForTeam2Clicked" />
+        <!--<Button-->
+        <!--android:id="@+id/addForTeam2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="5dp"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:background="@drawable/colors"-->
+        <!--android:fontFamily="serif"-->
+        <!--android:gravity="center_vertical|left"-->
+        <!--android:onClick="onAddForTeam2Clicked"-->
+        <!--android:paddingLeft="5dp"-->
+        <!--android:text="Add Player"-->
+        <!--android:textStyle="italic" />-->
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/startGameButton"

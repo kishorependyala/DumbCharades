@@ -5,7 +5,6 @@
     android:animateLayoutChanges="true"
     android:orientation="horizontal">
 
-
     <EditText
         android:id="@+id/editText"
         android:layout_width="wrap_content"
@@ -18,10 +17,10 @@
     </EditText>
 
     <ImageButton
-        android:id="@+id/delete"
+        android:id="@+id/deleteForTeam2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:background="@drawable/delete"
-        android:onClick="onDeleteClicked"/>
+        android:onClick="onDeleteForTeam2Clicked" />
 </LinearLayout>
