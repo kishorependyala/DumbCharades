@@ -18,8 +18,8 @@ import com.teabreaktechnology.dumcharades.cache.GameCache;
 public class CreateTeamsActivity extends Activity {
 
 
-    public int team1Count = 1;
-    public int team2Count = 1;
+    public int team1Count = 0;
+    public int team2Count = 0;
     private LinearLayout team1LinearLayout;
     private LinearLayout team2LinearLayout;
 
@@ -49,8 +49,10 @@ public class CreateTeamsActivity extends Activity {
         team1LinearLayout = (LinearLayout) findViewById(R.id.team1LinearLayout);
         team2LinearLayout = (LinearLayout) findViewById(R.id.team2LinearLayout);
 
-        inflateEditRow("player " + team1Count, team1LinearLayout);
-        inflateEditRow("player " + team2Count, team2LinearLayout);
+        inflateEditRow("player " + nextTeam1PlayerId(), team1LinearLayout);
+        inflateEditRow("player " + nextTeam1PlayerId(), team1LinearLayout);
+        inflateEditRow("player " + nextTeam2PlayerId(), team2LinearLayout);
+        inflateEditRow("player " + nextTeam2PlayerId(), team2LinearLayout);
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
 
@@ -95,26 +97,33 @@ public class CreateTeamsActivity extends Activity {
         });
     }
 
+    private int nextTeam2PlayerId() {
+        return (++team2Count);
+    }
+
+    private int nextTeam1PlayerId() {
+        return (++team1Count);
+    }
+
 
     public void onAddForTeam1Clicked(View v) {
-        team1Count++;
-        inflateEditRow("player " + team1Count, team1LinearLayout);
+        inflateEditRow("player " + nextTeam1PlayerId(), team1LinearLayout);
     }
 
     public void onAddForTeam2Clicked(View v) {
         team2Count++;
-        inflateEditRow("player " + team2Count, team2LinearLayout);
+        inflateEditRow("player " + nextTeam2PlayerId(), team2LinearLayout);
 
-    }
-
-    public void onDeleteForTeam2Clicked(View v) {
-        team2Count--;
-        team2LinearLayout.removeView((View) v.getParent());
     }
 
     public void onDeleteForTeam1Clicked(View v) {
         team1Count--;
         team1LinearLayout.removeView((View) v.getParent());
+    }
+
+    public void onDeleteForTeam2Clicked(View v) {
+        team2Count--;
+        team2LinearLayout.removeView((View) v.getParent());
     }
 
     private void inflateEditRow(String name, LinearLayout linearLayout) {

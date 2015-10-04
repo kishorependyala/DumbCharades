@@ -8,9 +8,10 @@ android {
         applicationId "com.teabreaktechnology.dumcharades"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 5
-        version 2.1
-        versionName "Yamuna"
+        targetSdkVersion 21
+        versionCode 6
+        version 2.3
+        versionName "Godavari"
     }
     buildTypes {
         release {
