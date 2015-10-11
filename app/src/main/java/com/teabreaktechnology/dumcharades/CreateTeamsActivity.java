@@ -41,6 +41,8 @@ public class CreateTeamsActivity extends Activity {
         TextView team1TextView = (TextView) findViewById(R.id.team1NameTextView);
         TextView team2TextView = (TextView) findViewById(R.id.team2NameTextView);
 
+
+
         Button startGameButton = (Button) findViewById(R.id.startGameButton);
 
         team1TextView.setText(team1Name);
@@ -55,6 +57,9 @@ public class CreateTeamsActivity extends Activity {
         inflateEditRow("player " + nextTeam2PlayerId(), team2LinearLayout);
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
+
+
+
 
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override

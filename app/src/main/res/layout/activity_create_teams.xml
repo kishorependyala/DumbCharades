@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/createTeams"
     android:layout_width="match_parent"
@@ -7,85 +7,92 @@
     android:orientation="vertical"
     tools:context="com.teabreaktechnology.dumcharades.CreateTeamsActivity">
 
-
-    <TextView
-        android:id="@+id/team1NameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="35dp"
-        android:fontFamily="serif"
-        android:text="Team 1 name"
-        android:textStyle="italic" />
-
     <LinearLayout
-        android:id="@+id/team1LinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/deleteForTeam1"
+
+
+        <TextView
+            android:id="@+id/team1NameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/add"
-            android:onClick="onAddForTeam1Clicked" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="35dp"
+            android:fontFamily="serif"
+            android:text="Team 1 name"
+            android:textStyle="italic" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/team1LinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/team2NameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/team1Player2editText"
-        android:fontFamily="serif"
-        android:text="Team 2 name"
-        android:textStyle="italic" />
+            <ImageButton
+                android:id="@+id/deleteForTeam1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/add"
+                android:onClick="onAddForTeam1Clicked" />
 
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/team2LinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/deleteForTeam2"
+        <TextView
+            android:id="@+id/team2NameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/add"
-            android:onClick="onAddForTeam2Clicked" />
-        <!--<Button-->
-        <!--android:id="@+id/addForTeam2"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="5dp"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:background="@drawable/colors"-->
-        <!--android:fontFamily="serif"-->
-        <!--android:gravity="center_vertical|left"-->
-        <!--android:onClick="onAddForTeam2Clicked"-->
-        <!--android:paddingLeft="5dp"-->
-        <!--android:text="Add Player"-->
-        <!--android:textStyle="italic" />-->
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/team1Player2editText"
+            android:fontFamily="serif"
+            android:text="Team 2 name"
+            android:textStyle="italic" />
+
+
+        <LinearLayout
+            android:id="@+id/team2LinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/deleteForTeam2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/add"
+                android:onClick="onAddForTeam2Clicked" />
+            <!--<Button-->
+            <!--android:id="@+id/addForTeam2"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:layout_marginLeft="5dp"-->
+            <!--android:layout_marginRight="5dp"-->
+            <!--android:background="@drawable/colors"-->
+            <!--android:fontFamily="serif"-->
+            <!--android:gravity="center_vertical|left"-->
+            <!--android:onClick="onAddForTeam2Clicked"-->
+            <!--android:paddingLeft="5dp"-->
+            <!--android:text="Add Player"-->
+            <!--android:textStyle="italic" />-->
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/startGameButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/team2Player2editText"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/colors"
+            android:fontFamily="serif"
+            android:text="Start Game"
+            android:textStyle="italic" />
+
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/startGameButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/team2Player2editText"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/colors"
-        android:fontFamily="serif"
-        android:text="Start Game"
-        android:textStyle="italic" />
-
-</LinearLayout>
+</ScrollView>
