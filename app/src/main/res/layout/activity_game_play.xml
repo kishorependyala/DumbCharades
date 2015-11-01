@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@drawable/home_plain"
     android:fontFamily="serif"
     android:padding="16dp"
     android:textStyle="italic"
@@ -40,7 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/teamName"
         android:layout_marginTop="25dp"
-
         android:fontFamily="serif"
         android:text="Next player "
         android:textAlignment="center"

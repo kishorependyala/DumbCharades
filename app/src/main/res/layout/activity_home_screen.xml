@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@drawable/home_plain"
     tools:context=".HomeScreen">
 
     <LinearLayout
@@ -28,7 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:fontFamily="serif"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:background="@android:drawable/dialog_holo_light_frame"/>
 
         <TextView
             android:id="@+id/textView2"
@@ -45,7 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:fontFamily="serif"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:background="@android:drawable/dialog_holo_light_frame"/>
 
 
         <TextView
@@ -72,7 +74,8 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:fontFamily="serif"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:background="@android:drawable/dialog_holo_light_frame"/>
 
         <TextView
             android:id="@+id/LevelTextView"
@@ -89,7 +92,8 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:fontFamily="serif"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:background="@android:drawable/dialog_holo_light_frame"/>
 
 
         <TextView
@@ -106,7 +110,8 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:fontFamily="serif"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:background="@android:drawable/dialog_holo_light_frame"/>
 
 
         <TextView
@@ -123,7 +128,7 @@
             android:id="@+id/createGameButton"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@drawable/blue"
+            android:background="@drawable/colors"
             android:fontFamily="serif"
             android:text="Create Game"
             android:textStyle="italic" />
