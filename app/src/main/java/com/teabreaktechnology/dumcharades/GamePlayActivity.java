@@ -141,7 +141,6 @@ public class GamePlayActivity extends Activity {
         });
 
 
-
     }
 
     private void startTimer(final GameCache gameCache, final int gameId, final AtomicLong currentTimeValue) {
