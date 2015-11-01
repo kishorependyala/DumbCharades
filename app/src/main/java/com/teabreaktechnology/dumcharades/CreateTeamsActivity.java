@@ -1,7 +1,9 @@
 package com.teabreaktechnology.dumcharades;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -18,8 +20,7 @@ import com.teabreaktechnology.dumcharades.cache.GameCache;
 public class CreateTeamsActivity extends Activity {
 
 
-    public int team1Count = 0;
-    public int team2Count = 0;
+    public int playerCount = 0;
     private LinearLayout team1LinearLayout;
     private LinearLayout team2LinearLayout;
 
@@ -27,8 +28,6 @@ public class CreateTeamsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_teams);
-
-
 
         Bundle extras = getIntent().getExtras();
 
@@ -41,8 +40,6 @@ public class CreateTeamsActivity extends Activity {
         TextView team1TextView = (TextView) findViewById(R.id.team1NameTextView);
         TextView team2TextView = (TextView) findViewById(R.id.team2NameTextView);
 
-
-
         Button startGameButton = (Button) findViewById(R.id.startGameButton);
 
         team1TextView.setText(team1Name);
@@ -51,15 +48,12 @@ public class CreateTeamsActivity extends Activity {
         team1LinearLayout = (LinearLayout) findViewById(R.id.team1LinearLayout);
         team2LinearLayout = (LinearLayout) findViewById(R.id.team2LinearLayout);
 
-        inflateEditRow("player " + nextTeam1PlayerId(), team1LinearLayout);
-        inflateEditRow("player " + nextTeam1PlayerId(), team1LinearLayout);
-        inflateEditRow("player " + nextTeam2PlayerId(), team2LinearLayout);
-        inflateEditRow("player " + nextTeam2PlayerId(), team2LinearLayout);
+        inflateEditRow("player " + nextPlayerId(), team1LinearLayout);
+        inflateEditRow("player " + nextPlayerId(), team1LinearLayout);
+        inflateEditRow("player " + nextPlayerId(), team2LinearLayout);
+        inflateEditRow("player " + nextPlayerId(), team2LinearLayout);
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
-
-
-
 
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +63,8 @@ public class CreateTeamsActivity extends Activity {
 
                 GameCache gameCache = GameCache.getInstance(true);
 
+                StringBuilder errorString = new StringBuilder();
+
                 int team1Id = gameCache.addTeam(team1Name);
                 int team2Id = gameCache.addTeam(team2Name);
                 int gameId = 1;
@@ -77,57 +73,87 @@ public class CreateTeamsActivity extends Activity {
                 for (int i = 0; i < team1LinearLayout.getChildCount() - 1; i++) {
                     View childAt = team1LinearLayout.getChildAt(i);
                     EditText editText = (EditText) childAt.findViewById(R.id.editText);
-                    String s = editText.getText().toString();
-                    System.out.println("player name " + s + " " + s.length());
-                    int player1Id = gameCache.addPlayer(s);
-                    gameCache.addPlayer(gameId, team1Id, player1Id);
+                    String playerName = editText.getText().toString();
+                    System.out.println("player name " + playerName + " " + playerName.length());
+                    int playerId = gameCache.addPlayer(playerName);
+
+                    if (playerId == -1) {
+                        errorString.append("Team 1, " + playerName + "\n");
+                    } else {
+                        gameCache.addPlayer(gameId, team1Id, playerId);
+                    }
                 }
 
                 for (int i = 0; i < team2LinearLayout.getChildCount() - 1; i++) {
                     View childAt = team2LinearLayout.getChildAt(i);
                     EditText editText = (EditText) childAt.findViewById(R.id.editText);
-                    String s = editText.getText().toString();
-                    System.out.println("player name " + s + " " + s.length());
-                    int player1Id = gameCache.addPlayer(s);
-                    gameCache.addPlayer(gameId, team2Id, player1Id);
+                    String playerName = editText.getText().toString();
+                    System.out.println("player name " + playerName + " " + playerName.length());
+                    int playerId = gameCache.addPlayer(playerName);
+                    gameCache.addPlayer(gameId, team2Id, playerId);
+
+                    if (playerId == -1) {
+                        errorString.append("Team 2, " + playerName + "\n");
+                    } else {
+                        gameCache.addPlayer(gameId, team1Id, playerId);
+                    }
                 }
 
                 startGameIntent.putExtra("gameId", gameId + "");
                 startGameIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
                 startGameIntent.putExtra("language", language);
                 startGameIntent.putExtra("difficultyLevel", difficultyLevel);
-                startActivity(startGameIntent);
+
+
+                if (errorString.length() > 0) {
+
+                    showAlertPopup(errorString.toString());
+                } else {
+                    startActivity(startGameIntent);
+                }
 
             }
         });
     }
 
-    private int nextTeam2PlayerId() {
-        return (++team2Count);
+    private void showAlertPopup(String message) {
+
+        AlertDialog alertDialog = new AlertDialog.Builder(CreateTeamsActivity.this).create();
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage("Duplicates in playerNames - please pick unique names across the teams \n" + message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 
-    private int nextTeam1PlayerId() {
-        return (++team1Count);
+    private int nextTeam2PlayerId() {
+        return (++playerCount);
+    }
+
+    private int nextPlayerId() {
+        return (++playerCount);
     }
 
 
     public void onAddForTeam1Clicked(View v) {
-        inflateEditRow("player " + nextTeam1PlayerId(), team1LinearLayout);
+        inflateEditRow("player " + nextPlayerId(), team1LinearLayout);
     }
 
     public void onAddForTeam2Clicked(View v) {
-        team2Count++;
-        inflateEditRow("player " + nextTeam2PlayerId(), team2LinearLayout);
+        inflateEditRow("player " + nextPlayerId(), team2LinearLayout);
 
     }
 
     public void onDeleteForTeam1Clicked(View v) {
-        team1Count--;
         team1LinearLayout.removeView((View) v.getParent());
     }
 
     public void onDeleteForTeam2Clicked(View v) {
-        team2Count--;
         team2LinearLayout.removeView((View) v.getParent());
     }
 

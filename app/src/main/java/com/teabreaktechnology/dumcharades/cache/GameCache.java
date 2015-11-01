@@ -214,7 +214,7 @@ public class GameCache {
             Integer existingPlayerId = entry.getKey();
             String existingPlayerName = entry.getValue().getPlayerName();
             if (playerName.equalsIgnoreCase(existingPlayerName)) {
-                return existingPlayerId;
+                return -1;
             }
         }
         int playerId = playerIdCounter.getAndIncrement();
