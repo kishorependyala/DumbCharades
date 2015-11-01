@@ -98,11 +98,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/timer"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/next"
         android:fontFamily="serif"
-        android:textStyle="italic"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="16dp"/>
+        android:textStyle="italic" />
 
 
     <Button
@@ -110,33 +110,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/timer"
+        android:layout_marginRight="20dp"
         android:layout_toEndOf="@+id/nextPlayButton"
         android:layout_toRightOf="@+id/nextPlayButton"
         android:background="@drawable/correct"
-        android:fontFamily="serif"
-        android:layout_marginRight="20dp"
-        android:textStyle="italic" />
-
-    <Button
-        android:id="@+id/pauseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timer"
-        android:layout_toEndOf="@+id/nextPlayButton"
-        android:layout_toRightOf="@+id/correctButton"
-        android:background="@drawable/pause"
-        android:fontFamily="serif"
-        android:textStyle="italic"
-        android:layout_marginRight="20dp"/>
-
-    <Button
-        android:id="@+id/restartButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timer"
-        android:layout_toEndOf="@+id/pauseButton"
-        android:layout_toRightOf="@+id/pauseButton"
-        android:background="@drawable/play"
         android:fontFamily="serif"
         android:textStyle="italic" />
 

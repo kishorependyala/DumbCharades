@@ -29,8 +29,8 @@ public class HomeScreenActivity extends Activity {
         Button createGameButton = (Button) findViewById(R.id.createGameButton);
 
 
-        String[] timeIntervals = new String[]{"1 minute", "2 minutes", "3 minutes", "4 minutes"};
-        final String[] timeIntervalInSeconds = new String[]{"60", "120", "180", "240"};
+        String[] timeIntervals = new String[]{"10 seconds", "1 minute", "2 minutes", "3 minutes", "4 minutes"};
+        final String[] timeIntervalInSeconds = new String[]{"10", "60", "120", "180", "240"};
 
         String[] languages = new String[]{"Hindi", "Telugu"};
 

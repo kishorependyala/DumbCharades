@@ -1,6 +1,8 @@
 package com.teabreaktechnology.dumcharades;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -19,6 +21,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class GamePlayActivity extends Activity {
 
+    final int PLAY = 1;
+    final int PAUSE = 2;
+    final int RESUME = 3;
+    final int NEXTPLAY = 4;
+    int showMovie = NEXTPLAY;
     TextView gameNameTextView;
     TextView teamNameTextView;
     TextView playerNameTextView;
@@ -28,14 +35,10 @@ public class GamePlayActivity extends Activity {
     TextView scoreBoardVIew;
     Integer nextPlayerId = 0;
     Integer nextMovieId = 0;
-    Button pauseButton;
-    Button restartButton;
     CountDownTimer countDownTimer;
     Button nextPlayButton;
     Button correctButton;
-    int showMovie = 0;
     MediaPlayer mp;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,29 +79,49 @@ public class GamePlayActivity extends Activity {
         final int eachPlayTime = new Integer(timeIntervalForEachPlay) * 1000;
         final AtomicLong currentTimeValue = new AtomicLong(eachPlayTime);
 
-        pauseButton = (Button) findViewById(R.id.pauseButton);
-        restartButton = (Button) findViewById(R.id.restartButton);
+
         nextPlayButton = (Button) findViewById(R.id.nextPlayButton);
         correctButton = (Button) findViewById(R.id.correctButton);
+
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
 
         startTimer(gameCache, gameId, currentTimeValue);
+
         setNextPlayReadyState(gameCache, gameId);
+
+
         nextPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mp.start();
-                GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
-                gameCache.addGamePlay(gamePlay);
-                scoreBoardVIew.setText(gameCache.getGameStatus());
-                if (showMovie == 1) {
-                    setNextPlay(gameCache, gameId);
-                } else {
-                    setNextPlayReadyState(gameCache, gameId);
-                    countDownTimer.cancel();
-                }
 
+                if (showMovie == NEXTPLAY || showMovie == PLAY) {
+                    GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
+                    gameCache.addGamePlay(gamePlay);
+                    scoreBoardVIew.setText(gameCache.getGameStatus());
+                    nextPlayButton.setBackgroundResource(R.drawable.pause);
+                    if (showMovie == PLAY) {
+                        correctButton.setVisibility(View.VISIBLE);
+                        setNextPlay(gameCache, gameId);
+                    } else {
+                        correctButton.setVisibility(View.INVISIBLE);
+                        setNextPlayReadyState(gameCache, gameId);
+                        countDownTimer.cancel();
+                    }
+
+                } else if (showMovie == PAUSE) {
+                    showMovie = RESUME;
+                    nextPlayButton.setBackgroundResource(R.drawable.play);
+                    correctButton.setVisibility(View.INVISIBLE);
+                    countDownTimer.cancel();
+                } else if (showMovie == RESUME) {
+                    showMovie = PLAY;
+                    nextPlayButton.setBackgroundResource(R.drawable.pause);
+                    correctButton.setVisibility(View.VISIBLE);
+                    startTimer(gameCache, gameId, currentTimeValue);
+                    countDownTimer.start();
+                }
 
             }
         });
@@ -118,31 +141,7 @@ public class GamePlayActivity extends Activity {
         });
 
 
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mp.start();
-                nextPlayButton.setEnabled(false);
-                restartButton.setEnabled(true);
-                correctButton.setEnabled(false);
-                pauseButton.setEnabled(false);
-                countDownTimer.cancel();
-            }
-        });
 
-
-        restartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mp.start();
-                nextPlayButton.setEnabled(true);
-                restartButton.setEnabled(false);
-                correctButton.setEnabled(true);
-                pauseButton.setEnabled(true);
-                startTimer(gameCache, gameId, currentTimeValue);
-                countDownTimer.start();
-            }
-        });
     }
 
     private void startTimer(final GameCache gameCache, final int gameId, final AtomicLong currentTimeValue) {
@@ -171,6 +170,7 @@ public class GamePlayActivity extends Activity {
 
                 GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
                 gameCache.addGamePlay(gamePlay);
+                showMovie = NEXTPLAY;
                 setNextPlayReadyState(gameCache, gameId);
             }
         };
@@ -191,35 +191,26 @@ public class GamePlayActivity extends Activity {
 
 
     private void setNextPlayReadyState(GameCache gameCache, int gameId) {
-        this.showMovie = 1;
+        this.showMovie = PLAY;
         this.nextPlayerId = gameCache.getNextPlayer(gameId);
         String playerName = gameCache.getPlayerName(nextPlayerId);
         final int teamId = gameCache.getTeamId(nextPlayerId);
         String teamName = gameCache.getTeamName(teamId);
         int roundNumber = gameCache.getRoundNumber();
-
-
         teamNameTextView.setText(teamName);
         playerNameTextView.setText(playerName);
         roundNumberTextView.setText("Round " + roundNumber + "");
         scoreBoardVIew.setText(gameCache.getGameStatus());
-        restartButton.setEnabled(false);
-        pauseButton.setEnabled(false);
-        correctButton.setEnabled(false);
-        nextPlayButton.setEnabled(true);
+        nextPlayButton.setBackgroundResource(R.drawable.play);
         movieNameTextView.setText("");
     }
 
 
     private void setNextPlay(GameCache gameCache, int gameId) {
-        this.showMovie = 0;
+        this.showMovie = NEXTPLAY;
         this.nextMovieId = gameCache.getNextMovie();
         final String nextMovieName = gameCache.getMovieName(nextMovieId);
         movieNameTextView.setText(nextMovieName);
-        restartButton.setEnabled(false);
-        pauseButton.setEnabled(true);
-        correctButton.setEnabled(true);
-        nextPlayButton.setEnabled(true);
         countDownTimer.start();
     }
 
@@ -240,8 +231,39 @@ public class GamePlayActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            onBackPressed();
+            return true;
+        }
+
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    @TargetApi(16)
+    public void onBackPressed() {
+        System.out.println("Back button pressed");
+
+        Intent createTeamsIntent = getParentActivityIntent();
+
+
+        Bundle extras = getIntent().getExtras();
+        final String language = extras.getString("language");
+        final Integer difficultyLevel = extras.getInt("difficultyLevel");
+        final String timeIntervalForEachPlay = extras.getString("timeIntervalForEachPlay");
+        final String team1Name = extras.getString("team1Name");
+        final String team2Name = extras.getString("team2Name");
+
+        createTeamsIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
+        createTeamsIntent.putExtra("language", language);
+        createTeamsIntent.putExtra("difficultyLevel", difficultyLevel);
+
+        createTeamsIntent.putExtra("team1Name", team1Name);
+        createTeamsIntent.putExtra("team2Name", team2Name);
+
+        super.onBackPressed();
     }
 }

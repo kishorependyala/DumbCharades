@@ -95,7 +95,7 @@ public class CreateTeamsActivity extends Activity {
                     if (playerId == -1) {
                         errorString.append("Team 2, " + playerName + "\n");
                     } else {
-                        gameCache.addPlayer(gameId, team1Id, playerId);
+                        gameCache.addPlayer(gameId, team2Id, playerId);
                     }
                 }
 
@@ -104,6 +104,8 @@ public class CreateTeamsActivity extends Activity {
                 startGameIntent.putExtra("language", language);
                 startGameIntent.putExtra("difficultyLevel", difficultyLevel);
 
+                startGameIntent.putExtra("team1Name", team1Name);
+                startGameIntent.putExtra("team2Name", team2Name);
 
                 if (errorString.length() > 0) {
 

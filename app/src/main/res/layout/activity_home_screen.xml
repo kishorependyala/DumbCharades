@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="serif"
-        android:padding="16dp"
         android:orientation="vertical"
+        android:padding="16dp"
         android:textStyle="italic">
 
 
@@ -27,9 +27,9 @@
             android:id="@+id/team1Name"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
             android:fontFamily="serif"
-            android:textStyle="italic"
-            android:background="@android:drawable/dialog_holo_light_frame"/>
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/textView2"
@@ -45,9 +45,9 @@
             android:id="@+id/team2Name"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
             android:fontFamily="serif"
-            android:textStyle="italic"
-            android:background="@android:drawable/dialog_holo_light_frame"/>
+            android:textStyle="italic" />
 
 
         <TextView
@@ -72,10 +72,10 @@
         <Spinner
             android:id="@+id/language"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
             android:fontFamily="serif"
-            android:textStyle="italic"
-            android:background="@android:drawable/dialog_holo_light_frame"/>
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/LevelTextView"
@@ -90,10 +90,10 @@
         <Spinner
             android:id="@+id/difficultyLevel"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
             android:fontFamily="serif"
-            android:textStyle="italic"
-            android:background="@android:drawable/dialog_holo_light_frame"/>
+            android:textStyle="italic" />
 
 
         <TextView
@@ -108,10 +108,10 @@
         <Spinner
             android:id="@+id/timeIntervalForEachPlay"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
             android:fontFamily="serif"
-            android:textStyle="italic"
-            android:background="@android:drawable/dialog_holo_light_frame"/>
+            android:textStyle="italic" />
 
 
         <TextView
@@ -127,7 +127,7 @@
         <Button
             android:id="@+id/createGameButton"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:background="@drawable/colors"
             android:fontFamily="serif"
             android:text="Create Game"
