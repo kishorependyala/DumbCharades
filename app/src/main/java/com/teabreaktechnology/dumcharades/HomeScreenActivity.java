@@ -22,8 +22,8 @@ public class HomeScreenActivity extends Activity {
 
         final EditText team1EditText = (EditText) findViewById(R.id.team1Name);
         final EditText team2EditText = (EditText) findViewById(R.id.team2Name);
-        team1EditText.setText("SunRisers");
-        team2EditText.setText("Chargers");
+        team1EditText.setText("Team 1");
+        team2EditText.setText("Team 2");
 
 
         Button createGameButton = (Button) findViewById(R.id.createGameButton);
@@ -35,12 +35,12 @@ public class HomeScreenActivity extends Activity {
         String[] languages = new String[]{"Hindi", "Telugu"};
 
         final Spinner timeIntervalSpinner = (Spinner) findViewById(R.id.timeIntervalForEachPlay);
-        ArrayAdapter<String> timeIntervalAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, timeIntervals);
+        ArrayAdapter<String> timeIntervalAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, timeIntervals);
         timeIntervalSpinner.setAdapter(timeIntervalAdapter);
         timeIntervalSpinner.setSelection(1);
 
         final Spinner languageSpinner = (Spinner) findViewById(R.id.language);
-        ArrayAdapter<String> languageAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
+        ArrayAdapter<String> languageAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, languages);
         languageSpinner.setAdapter(languageAdapter);
 
         String[] difficultyLevelForDropDown = new String[]{"Easy", "Hard"};

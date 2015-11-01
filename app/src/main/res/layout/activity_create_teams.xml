@@ -3,14 +3,15 @@
     android:id="@+id/createTeams"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/home_plain"
+    android:background="@drawable/background"
     android:orientation="vertical"
     tools:context="com.teabreaktechnology.dumcharades.CreateTeamsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
 
     <TextView
@@ -85,10 +86,9 @@
         <Button
             android:id="@+id/startGameButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/team2Player2editText"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/colors"
+            android:layout_height="70dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/blue"
             android:fontFamily="serif"
             android:text="Start Game"
             android:textStyle="italic" />
