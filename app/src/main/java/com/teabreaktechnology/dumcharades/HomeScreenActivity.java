@@ -47,7 +47,7 @@ public class HomeScreenActivity extends Activity {
         final int[] difficultyLevel = new int[]{2, 1};
 
         final Spinner difficultyLevelSpinner = (Spinner) findViewById(R.id.difficultyLevel);
-        ArrayAdapter<String> difficultyLevelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, difficultyLevelForDropDown);
+        ArrayAdapter<String> difficultyLevelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, difficultyLevelForDropDown);
         difficultyLevelSpinner.setAdapter(difficultyLevelAdapter);
 
 
