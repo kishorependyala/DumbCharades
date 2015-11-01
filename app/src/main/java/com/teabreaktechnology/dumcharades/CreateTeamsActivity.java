@@ -28,7 +28,7 @@ public class CreateTeamsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_teams);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         Bundle extras = getIntent().getExtras();
 

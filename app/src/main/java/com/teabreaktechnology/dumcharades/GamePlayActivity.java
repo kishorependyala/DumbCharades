@@ -42,7 +42,6 @@ public class GamePlayActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         final GameCache gameCache = GameCache.getInstance(false);
         Bundle extras = getIntent().getExtras();
