@@ -89,7 +89,7 @@ public class GamePlayActivity extends Activity {
         startTimer(gameCache, gameId, currentTimeValue);
 
         setNextPlayReadyState(gameCache, gameId);
-
+        correctButton.setVisibility(View.INVISIBLE);
 
         nextPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
