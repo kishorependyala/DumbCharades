@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -54,6 +55,7 @@ public class CreateTeamsActivity extends Activity {
         inflateEditRow("player " + nextPlayerId(), team2LinearLayout);
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override

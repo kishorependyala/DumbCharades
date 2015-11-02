@@ -22,10 +22,10 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GamePlayActivity extends Activity {
 
     final int PLAY = 1;
+    int currentState = PLAY;
     final int PAUSE = 2;
     final int RESUME = 3;
     final int NEXTPLAY = 4;
-    int showMovie = NEXTPLAY;
     TextView gameNameTextView;
     TextView teamNameTextView;
     TextView playerNameTextView;
@@ -100,27 +100,29 @@ public class GamePlayActivity extends Activity {
             public void onClick(View v) {
                 mp.start();
 
-                if (showMovie == NEXTPLAY || showMovie == PLAY) {
+                if (currentState == NEXTPLAY || currentState == PLAY) {
                     GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
                     gameCache.addGamePlay(gamePlay);
                     scoreBoardVIew.setText(gameCache.getGameStatus());
                     nextPlayButton.setBackgroundResource(R.drawable.pause);
-                    if (showMovie == PLAY) {
+                    if (currentState == PLAY) {
+                        currentState = PAUSE;
                         correctButton.setVisibility(View.VISIBLE);
                         setNextPlay(gameCache, gameId);
                     } else {
+                        currentState = PLAY;
                         correctButton.setVisibility(View.INVISIBLE);
                         setNextPlayReadyState(gameCache, gameId);
                         countDownTimer.cancel();
                     }
 
-                } else if (showMovie == PAUSE) {
-                    showMovie = RESUME;
+                } else if (currentState == PAUSE) {
+                    currentState = RESUME;
                     nextPlayButton.setBackgroundResource(R.drawable.play);
                     correctButton.setVisibility(View.INVISIBLE);
                     countDownTimer.cancel();
-                } else if (showMovie == RESUME) {
-                    showMovie = PLAY;
+                } else if (currentState == RESUME) {
+                    currentState = PAUSE;
                     nextPlayButton.setBackgroundResource(R.drawable.pause);
                     correctButton.setVisibility(View.VISIBLE);
                     startTimer(gameCache, gameId, currentTimeValue);
@@ -139,6 +141,9 @@ public class GamePlayActivity extends Activity {
                 gameCache.addGamePlay(gamePlay);
                 scoreBoardVIew.setText(gameCache.getGameStatus());
                 setNextPlayReadyState(gameCache, gameId);
+
+                currentState = PLAY;
+                correctButton.setVisibility(View.INVISIBLE);
                 countDownTimer.cancel();
 
             }
@@ -173,7 +178,7 @@ public class GamePlayActivity extends Activity {
 
                 GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
                 gameCache.addGamePlay(gamePlay);
-                showMovie = NEXTPLAY;
+                currentState = NEXTPLAY;
                 setNextPlayReadyState(gameCache, gameId);
             }
         };
@@ -194,7 +199,6 @@ public class GamePlayActivity extends Activity {
 
 
     private void setNextPlayReadyState(GameCache gameCache, int gameId) {
-        this.showMovie = PLAY;
         this.nextPlayerId = gameCache.getNextPlayer(gameId);
         String playerName = gameCache.getPlayerName(nextPlayerId);
         final int teamId = gameCache.getTeamId(nextPlayerId);
@@ -210,7 +214,6 @@ public class GamePlayActivity extends Activity {
 
 
     private void setNextPlay(GameCache gameCache, int gameId) {
-        this.showMovie = NEXTPLAY;
         this.nextMovieId = gameCache.getNextMovie();
         final String nextMovieName = gameCache.getMovieName(nextMovieId);
         movieNameTextView.setText(nextMovieName);

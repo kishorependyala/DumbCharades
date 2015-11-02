@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,7 +33,7 @@ public class HomeScreenActivity extends Activity {
         String[] timeIntervals = new String[]{"10 seconds", "1 minute", "2 minutes", "3 minutes", "4 minutes"};
         final String[] timeIntervalInSeconds = new String[]{"10", "60", "120", "180", "240"};
 
-        String[] languages = new String[]{"Hindi", "Telugu","English"};
+        String[] languages = new String[]{"Hindi", "Telugu", "English"};
 
         final Spinner timeIntervalSpinner = (Spinner) findViewById(R.id.timeIntervalForEachPlay);
         ArrayAdapter<String> timeIntervalAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, timeIntervals);
@@ -53,6 +54,7 @@ public class HomeScreenActivity extends Activity {
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
 
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         createGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
