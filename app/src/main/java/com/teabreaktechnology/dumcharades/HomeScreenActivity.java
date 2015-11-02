@@ -32,7 +32,7 @@ public class HomeScreenActivity extends Activity {
         String[] timeIntervals = new String[]{"10 seconds", "1 minute", "2 minutes", "3 minutes", "4 minutes"};
         final String[] timeIntervalInSeconds = new String[]{"10", "60", "120", "180", "240"};
 
-        String[] languages = new String[]{"Hindi", "Telugu"};
+        String[] languages = new String[]{"Hindi", "Telugu","English"};
 
         final Spinner timeIntervalSpinner = (Spinner) findViewById(R.id.timeIntervalForEachPlay);
         ArrayAdapter<String> timeIntervalAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, timeIntervals);
