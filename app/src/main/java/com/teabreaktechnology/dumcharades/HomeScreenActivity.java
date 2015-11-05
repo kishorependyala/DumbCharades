@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.teabreaktechnology.util.AlertUtil;
+import com.teabreaktechnology.util.StringUtil;
+
 
 public class HomeScreenActivity extends Activity {
 
@@ -26,9 +29,7 @@ public class HomeScreenActivity extends Activity {
         team1EditText.setText("Team 1");
         team2EditText.setText("Team 2");
 
-
         Button createGameButton = (Button) findViewById(R.id.createGameButton);
-
 
         String[] timeIntervals = new String[]{"10 seconds", "1 minute", "2 minutes", "3 minutes", "4 minutes"};
         final String[] timeIntervalInSeconds = new String[]{"10", "60", "120", "180", "240"};
@@ -51,7 +52,6 @@ public class HomeScreenActivity extends Activity {
         ArrayAdapter<String> difficultyLevelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, difficultyLevelForDropDown);
         difficultyLevelSpinner.setAdapter(difficultyLevelAdapter);
 
-
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -60,13 +60,21 @@ public class HomeScreenActivity extends Activity {
             @Override
             public void onClick(View v) {
                 mp.start();
-                Intent createTeamsIntent = new Intent(HomeScreenActivity.this, CreateTeamsActivity.class);
 
                 String team2Name = team2EditText.getText().toString();
                 String team1Name = team1EditText.getText().toString();
-
-                createTeamsIntent.putExtra("team1Name", team1Name);
-                createTeamsIntent.putExtra("team2Name", team2Name);
+                if (!StringUtil.isValidString(team1Name)) {
+                    AlertUtil.showAlertPopup("Enter valid name for first team", HomeScreenActivity.this);
+                    return;
+                }
+                if (!StringUtil.isValidString(team2Name)) {
+                    AlertUtil.showAlertPopup("Enter valid name for second team", HomeScreenActivity.this);
+                    return;
+                }
+                if (team1Name.equalsIgnoreCase(team2Name)) {
+                    AlertUtil.showAlertPopup("Both team names cannot be the same", HomeScreenActivity.this);
+                    return;
+                }
 
                 int selectedId = timeIntervalSpinner.getSelectedItemPosition();
                 String timeIntervalForEachPlay = timeIntervalInSeconds[selectedId];
@@ -75,13 +83,16 @@ public class HomeScreenActivity extends Activity {
                 int selectedDifficultyLevelId = difficultyLevelSpinner.getSelectedItemPosition();
                 int selectedDifficultyLevel = difficultyLevel[selectedDifficultyLevelId];
 
+                Intent createTeamsIntent = new Intent(HomeScreenActivity.this, CreateTeamsActivity.class);
+                createTeamsIntent.putExtra("team1Name", team1Name);
+                createTeamsIntent.putExtra("team2Name", team2Name);
+
                 createTeamsIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
                 createTeamsIntent.putExtra("language", language);
                 createTeamsIntent.putExtra("difficultyLevel", selectedDifficultyLevel);
                 startActivity(createTeamsIntent);
             }
         });
-
     }
 
 

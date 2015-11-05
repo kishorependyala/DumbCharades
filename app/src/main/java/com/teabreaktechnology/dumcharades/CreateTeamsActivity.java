@@ -1,9 +1,7 @@
 package com.teabreaktechnology.dumcharades;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -16,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.teabreaktechnology.dumcharades.cache.GameCache;
+import com.teabreaktechnology.util.AlertUtil;
 
 
 public class CreateTeamsActivity extends Activity {
@@ -71,7 +70,7 @@ public class CreateTeamsActivity extends Activity {
                 int team2Id = gameCache.addTeam(team2Name);
                 int gameId = 1;
 
-
+                int playersInTeam1 = 0;
                 for (int i = 0; i < team1LinearLayout.getChildCount() - 1; i++) {
                     View childAt = team1LinearLayout.getChildAt(i);
                     EditText editText = (EditText) childAt.findViewById(R.id.editText);
@@ -83,9 +82,16 @@ public class CreateTeamsActivity extends Activity {
                         errorString.append("Team 1, " + playerName + "\n");
                     } else {
                         gameCache.addPlayer(gameId, team1Id, playerId);
+                        playersInTeam1++;
                     }
                 }
+                if (playersInTeam1 == 0) {
+                    AlertUtil.showAlertPopup("Team 1 should contain at least one player", CreateTeamsActivity.this);
+                    return;
+                }
 
+
+                int playersInTeam2 = 0;
                 for (int i = 0; i < team2LinearLayout.getChildCount() - 1; i++) {
                     View childAt = team2LinearLayout.getChildAt(i);
                     EditText editText = (EditText) childAt.findViewById(R.id.editText);
@@ -98,7 +104,13 @@ public class CreateTeamsActivity extends Activity {
                         errorString.append("Team 2, " + playerName + "\n");
                     } else {
                         gameCache.addPlayer(gameId, team2Id, playerId);
+                        playersInTeam2++;
                     }
+                }
+
+                if (playersInTeam2 == 0) {
+                    AlertUtil.showAlertPopup("Team 2 should contain at least one player", CreateTeamsActivity.this);
+                    return;
                 }
 
                 startGameIntent.putExtra("gameId", gameId + "");
@@ -110,33 +122,14 @@ public class CreateTeamsActivity extends Activity {
                 startGameIntent.putExtra("team2Name", team2Name);
 
                 if (errorString.length() > 0) {
-
-                    showAlertPopup(errorString.toString());
+                    String message = "Duplicates in playerNames - please pick unique names across the teams \n" + errorString.toString();
+                    AlertUtil.showAlertPopup(message, CreateTeamsActivity.this);
                 } else {
                     startActivity(startGameIntent);
                 }
 
             }
         });
-    }
-
-    private void showAlertPopup(String message) {
-
-        AlertDialog alertDialog = new AlertDialog.Builder(CreateTeamsActivity.this).create();
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage("Duplicates in playerNames - please pick unique names across the teams \n" + message);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
-    }
-
-    private int nextTeam2PlayerId() {
-        return (++playerCount);
     }
 
     private int nextPlayerId() {

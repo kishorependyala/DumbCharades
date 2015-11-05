@@ -25,7 +25,6 @@ public class GamePlayActivity extends Activity {
     int currentState = PLAY;
     final int PAUSE = 2;
     final int RESUME = 3;
-    final int NEXTPLAY = 4;
     TextView gameNameTextView;
     TextView teamNameTextView;
     TextView playerNameTextView;
@@ -54,11 +53,9 @@ public class GamePlayActivity extends Activity {
             String fileToLoad = null;
             if ("hindi".equalsIgnoreCase(language)) {
                 fileToLoad = "movies-hindi.csv";
-            } else if("telugu".equalsIgnoreCase(language)){
-                fileToLoad="movies-telugu.csv";
-            }
-
-            else {
+            } else if ("telugu".equalsIgnoreCase(language)) {
+                fileToLoad = "movies-telugu.csv";
+            } else {
                 fileToLoad = "movies-english.csv";
             }
             InputStream in = this.getAssets().open(fileToLoad);
@@ -83,14 +80,11 @@ public class GamePlayActivity extends Activity {
         final int eachPlayTime = new Integer(timeIntervalForEachPlay) * 1000;
         final AtomicLong currentTimeValue = new AtomicLong(eachPlayTime);
 
-
         nextPlayButton = (Button) findViewById(R.id.nextPlayButton);
         correctButton = (Button) findViewById(R.id.correctButton);
 
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
-
-        startTimer(gameCache, gameId, currentTimeValue);
 
         setNextPlayReadyState(gameCache, gameId);
         correctButton.setVisibility(View.INVISIBLE);
@@ -100,21 +94,16 @@ public class GamePlayActivity extends Activity {
             public void onClick(View v) {
                 mp.start();
 
-                if (currentState == NEXTPLAY || currentState == PLAY) {
+                if (currentState == PLAY) {
                     GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
                     gameCache.addGamePlay(gamePlay);
                     scoreBoardVIew.setText(gameCache.getGameStatus());
                     nextPlayButton.setBackgroundResource(R.drawable.pause);
-                    if (currentState == PLAY) {
-                        currentState = PAUSE;
-                        correctButton.setVisibility(View.VISIBLE);
-                        setNextPlay(gameCache, gameId);
-                    } else {
-                        currentState = PLAY;
-                        correctButton.setVisibility(View.INVISIBLE);
-                        setNextPlayReadyState(gameCache, gameId);
-                        countDownTimer.cancel();
-                    }
+                    currentState = PAUSE;
+                    correctButton.setVisibility(View.VISIBLE);
+                    currentTimeValue.set(eachPlayTime);
+                    startTimer(gameCache, gameId, currentTimeValue);
+                    setNextPlay(gameCache, gameId);
 
                 } else if (currentState == PAUSE) {
                     currentState = RESUME;
@@ -145,6 +134,7 @@ public class GamePlayActivity extends Activity {
                 currentState = PLAY;
                 correctButton.setVisibility(View.INVISIBLE);
                 countDownTimer.cancel();
+                timerTextView.setText("");
 
             }
         });
@@ -178,7 +168,8 @@ public class GamePlayActivity extends Activity {
 
                 GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
                 gameCache.addGamePlay(gamePlay);
-                currentState = NEXTPLAY;
+                currentState = PLAY;
+                correctButton.setVisibility(View.INVISIBLE);
                 setNextPlayReadyState(gameCache, gameId);
             }
         };

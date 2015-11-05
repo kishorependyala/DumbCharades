@@ -60,4 +60,8 @@ public class StringUtil {
         return split(str, ',', '"');
     }
 
+
+    public static boolean isValidString(String str) {
+        return str != null && !str.isEmpty();
+    }
 }
