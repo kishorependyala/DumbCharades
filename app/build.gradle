@@ -9,9 +9,9 @@ android {
         minSdkVersion 15
         targetSdkVersion 21
         targetSdkVersion 21
-        versionCode 7
+        versionCode 8
         version 2.3
-        versionName "Saraswati"
+        versionName "Sarayu"
     }
     buildTypes {
         release {
