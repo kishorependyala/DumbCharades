@@ -55,8 +55,11 @@ public class GamePlayActivity extends Activity {
                 fileToLoad = "movies-hindi.csv";
             } else if ("telugu".equalsIgnoreCase(language)) {
                 fileToLoad = "movies-telugu.csv";
-            } else {
+            } else if ("english".equalsIgnoreCase(language)){
                 fileToLoad = "movies-english.csv";
+            }
+            else {
+                fileToLoad="movies-marathi.csv";
             }
             InputStream in = this.getAssets().open(fileToLoad);
             gameCache.run(in, difficultyLevel);
