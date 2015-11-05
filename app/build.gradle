@@ -9,9 +9,9 @@ android {
         minSdkVersion 15
         targetSdkVersion 21
         targetSdkVersion 21
-        versionCode 9
+        versionCode 10
         version 2.3
-        versionName "Kaveri"
+        versionName "Krishna"
     }
     buildTypes {
         release {

@@ -260,7 +260,9 @@ public class GamePlayActivity extends Activity {
 
         createTeamsIntent.putExtra("team1Name", team1Name);
         createTeamsIntent.putExtra("team2Name", team2Name);
-        countDownTimer.cancel();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
         super.onBackPressed();
     }
 }

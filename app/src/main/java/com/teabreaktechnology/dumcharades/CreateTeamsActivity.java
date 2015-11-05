@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.teabreaktechnology.dumcharades.cache.GameCache;
 import com.teabreaktechnology.util.AlertUtil;
+import com.teabreaktechnology.util.CommonConstants;
 
 
 public class CreateTeamsActivity extends Activity {
@@ -78,8 +79,11 @@ public class CreateTeamsActivity extends Activity {
                     System.out.println("player name " + playerName + " " + playerName.length());
                     int playerId = gameCache.addPlayer(playerName);
 
-                    if (playerId == -1) {
-                        errorString.append("Team 1, " + playerName + "\n");
+                    if (playerId == CommonConstants.DUPLICATE_PLAYER) {
+                        errorString.append("Duplicate player in Team 1, " + playerName + "\n");
+                    }
+                    if (playerId == CommonConstants.EMPTY_PLAYERNAME) {
+                        errorString.append("Empty player name in Team 1 \n");
                     } else {
                         gameCache.addPlayer(gameId, team1Id, playerId);
                         playersInTeam1++;
@@ -100,8 +104,11 @@ public class CreateTeamsActivity extends Activity {
                     int playerId = gameCache.addPlayer(playerName);
                     gameCache.addPlayer(gameId, team2Id, playerId);
 
-                    if (playerId == -1) {
-                        errorString.append("Team 2, " + playerName + "\n");
+                    if (playerId == CommonConstants.DUPLICATE_PLAYER) {
+                        errorString.append("Duplicate player in Team 2, " + playerName + "\n");
+                    }
+                    if (playerId == CommonConstants.EMPTY_PLAYERNAME) {
+                        errorString.append("Empty player name in Team 2 \n");
                     } else {
                         gameCache.addPlayer(gameId, team2Id, playerId);
                         playersInTeam2++;
@@ -122,7 +129,7 @@ public class CreateTeamsActivity extends Activity {
                 startGameIntent.putExtra("team2Name", team2Name);
 
                 if (errorString.length() > 0) {
-                    String message = "Duplicates in playerNames - please pick unique names across the teams \n" + errorString.toString();
+                    String message = errorString.toString();
                     AlertUtil.showAlertPopup(message, CreateTeamsActivity.this);
                 } else {
                     startActivity(startGameIntent);

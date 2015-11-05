@@ -5,6 +5,7 @@ import com.teabreaktechnology.dumcharades.bean.GamePlay;
 import com.teabreaktechnology.dumcharades.bean.Movie;
 import com.teabreaktechnology.dumcharades.bean.Player;
 import com.teabreaktechnology.dumcharades.bean.Team;
+import com.teabreaktechnology.util.CommonConstants;
 import com.teabreaktechnology.util.StringUtil;
 
 import java.io.BufferedReader;
@@ -208,13 +209,13 @@ public class GameCache {
 
     public int addPlayer(String playerName) {
         if (playerName == null || playerName.isEmpty()) {
-            throw new IllegalArgumentException("Invalid player name");
+            return CommonConstants.EMPTY_PLAYERNAME;
         }
         for (Map.Entry<Integer, Player> entry : playerMap.entrySet()) {
             Integer existingPlayerId = entry.getKey();
             String existingPlayerName = entry.getValue().getPlayerName();
             if (playerName.equalsIgnoreCase(existingPlayerName)) {
-                return -1;
+                return CommonConstants.DUPLICATE_PLAYER;
             }
         }
         int playerId = playerIdCounter.getAndIncrement();
