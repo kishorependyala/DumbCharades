@@ -22,9 +22,9 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GamePlayActivity extends Activity {
 
     final int PLAY = 1;
-    int currentState = PLAY;
     final int PAUSE = 2;
     final int RESUME = 3;
+    int currentState = PLAY;
     TextView gameNameTextView;
     TextView teamNameTextView;
     TextView playerNameTextView;
@@ -50,17 +50,7 @@ public class GamePlayActivity extends Activity {
         final String language = extras.getString("language");
         final Integer difficultyLevel = extras.getInt("difficultyLevel");
         try {
-            String fileToLoad = null;
-            if ("hindi".equalsIgnoreCase(language)) {
-                fileToLoad = "movies-hindi.csv";
-            } else if ("telugu".equalsIgnoreCase(language)) {
-                fileToLoad = "movies-telugu.csv";
-            } else if ("english".equalsIgnoreCase(language)){
-                fileToLoad = "movies-english.csv";
-            }
-            else {
-                fileToLoad="movies-marathi.csv";
-            }
+            String fileToLoad = "movies-" + language.toLowerCase() + ".csv";
             InputStream in = this.getAssets().open(fileToLoad);
             gameCache.run(in, difficultyLevel);
         } catch (Exception e) {

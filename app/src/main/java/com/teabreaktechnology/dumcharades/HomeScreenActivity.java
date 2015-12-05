@@ -1,5 +1,6 @@
 package com.teabreaktechnology.dumcharades;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -14,15 +15,22 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.teabreaktechnology.util.AlertUtil;
+import com.teabreaktechnology.util.Constants;
 import com.teabreaktechnology.util.StringUtil;
 
 
 public class HomeScreenActivity extends Activity {
 
+    private static final String[] COUNTRIES = new String[]{
+            "Belgium", "France", "Italy", "Germany", "Spain"
+    };
+
     @Override
+    @TargetApi(16)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+
 
         final EditText team1EditText = (EditText) findViewById(R.id.team1Name);
         final EditText team2EditText = (EditText) findViewById(R.id.team2Name);
@@ -31,25 +39,20 @@ public class HomeScreenActivity extends Activity {
 
         Button createGameButton = (Button) findViewById(R.id.createGameButton);
 
-        String[] timeIntervals = new String[]{"10 seconds", "1 minute", "2 minutes", "3 minutes", "4 minutes"};
-        final String[] timeIntervalInSeconds = new String[]{"10", "60", "120", "180", "240"};
-
-        String[] languages = new String[]{"Hindi", "Telugu", "English","marathi"};
 
         final Spinner timeIntervalSpinner = (Spinner) findViewById(R.id.timeIntervalForEachPlay);
-        ArrayAdapter<String> timeIntervalAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, timeIntervals);
+        ArrayAdapter<String> timeIntervalAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Constants.timeIntervals);
         timeIntervalSpinner.setAdapter(timeIntervalAdapter);
         timeIntervalSpinner.setSelection(1);
 
         final Spinner languageSpinner = (Spinner) findViewById(R.id.language);
-        ArrayAdapter<String> languageAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, languages);
+        ArrayAdapter<String> languageAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Constants.languages);
         languageSpinner.setAdapter(languageAdapter);
 
-        String[] difficultyLevelForDropDown = new String[]{"Easy", "Hard"};
-        final int[] difficultyLevel = new int[]{2, 1};
+
 
         final Spinner difficultyLevelSpinner = (Spinner) findViewById(R.id.difficultyLevel);
-        ArrayAdapter<String> difficultyLevelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, difficultyLevelForDropDown);
+        ArrayAdapter<String> difficultyLevelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Constants.difficultyLevelForDropDown);
         difficultyLevelSpinner.setAdapter(difficultyLevelAdapter);
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
@@ -77,11 +80,11 @@ public class HomeScreenActivity extends Activity {
                 }
 
                 int selectedId = timeIntervalSpinner.getSelectedItemPosition();
-                String timeIntervalForEachPlay = timeIntervalInSeconds[selectedId];
+                String timeIntervalForEachPlay = Constants.timeIntervalInSeconds[selectedId];
                 String language = (String) languageSpinner.getSelectedItem();
 
                 int selectedDifficultyLevelId = difficultyLevelSpinner.getSelectedItemPosition();
-                int selectedDifficultyLevel = difficultyLevel[selectedDifficultyLevelId];
+                int selectedDifficultyLevel = Constants.difficultyLevel[selectedDifficultyLevelId];
 
                 Intent createTeamsIntent = new Intent(HomeScreenActivity.this, CreateTeamsActivity.class);
                 createTeamsIntent.putExtra("team1Name", team1Name);
@@ -94,7 +97,6 @@ public class HomeScreenActivity extends Activity {
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -117,5 +119,6 @@ public class HomeScreenActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }

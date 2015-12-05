@@ -90,7 +90,7 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/colors"
             android:fontFamily="serif"
-            android:text="Start Game"
+            android:text="Start"
             android:textStyle="italic" />
 
 

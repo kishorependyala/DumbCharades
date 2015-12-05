@@ -13,8 +13,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by kishorekpendyala on 1/18/15.
  */
-public class GameCache {
+public class GameCache implements Serializable {
+    private static final long serialVersionUID = 1;
 
     private static GameCache gameCache = null;
     private static AtomicInteger movieCounter = new AtomicInteger(1);
@@ -55,25 +56,6 @@ public class GameCache {
         return gameCache;
     }
 
-
-    public static void test(List<Integer> moviesPlayList) {
-        while (true) {
-
-
-            if (moviesPlayList.isEmpty()) {
-                Integer[] arr = {4, 2, 7, 1, 6};
-                List<Integer> playList = Arrays.asList(arr);
-                moviesPlayList.addAll(playList);
-            }
-
-            int remainingMovies = moviesPlayList.size();
-            int nextMovieToPlay = new Random().nextInt(remainingMovies);
-            moviesPlayList.remove(nextMovieToPlay);
-            System.out.println("moviesPlayList = " + moviesPlayList);
-            System.out.println(nextMovieToPlay);
-        }
-    }
-
     /*
         Reads input csv movie file and creates a map of movie names
         Language,Year,Title,Genre,Director,Cast,Level
@@ -92,7 +74,7 @@ public class GameCache {
                 if (line == null) {
                     break;
                 }
-                if (line.startsWith("#")) {
+                if (line.startsWith("#") || line.startsWith("Y") || line.startsWith("y")) {
                     System.out.println("line comment");
                     continue;
                 }

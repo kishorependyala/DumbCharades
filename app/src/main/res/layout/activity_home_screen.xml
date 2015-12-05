@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="serif"
-            android:text="Enter Team 1 Name"
+            android:text="Team 1"
             android:textStyle="italic" />
 
         <EditText
@@ -29,6 +29,7 @@
             android:layout_height="50dp"
             android:background="@android:drawable/dialog_holo_light_frame"
             android:fontFamily="serif"
+            android:hint="Enter Team 1 Name"
             android:textStyle="italic" />
 
         <TextView
@@ -36,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="serif"
-            android:text="Enter Team 2 Name"
+            android:text="Team 2"
             android:textStyle="italic"
 
             />
@@ -47,6 +48,7 @@
             android:layout_height="50dp"
             android:background="@android:drawable/dialog_holo_light_frame"
             android:fontFamily="serif"
+            android:hint="Enter Team 2 Name"
             android:textStyle="italic" />
 
 
@@ -130,8 +132,10 @@
             android:layout_height="50dp"
             android:background="@drawable/colors"
             android:fontFamily="serif"
-            android:text="Create Game"
+            android:text="New Game"
             android:textStyle="italic" />
+
+
     </LinearLayout>
 
 </ScrollView>

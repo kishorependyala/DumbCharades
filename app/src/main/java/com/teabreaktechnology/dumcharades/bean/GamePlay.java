@@ -1,9 +1,11 @@
 package com.teabreaktechnology.dumcharades.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by kishorekpendyala on 1/18/15.
  */
-public class GamePlay {
+public class GamePlay implements Serializable {
     private int gameId;
     private int teamId;
     private int playerId;

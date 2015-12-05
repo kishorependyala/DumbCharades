@@ -2,10 +2,14 @@ package com.teabreaktechnology.dumcharades.bean;
 
 import com.teabreaktechnology.dumcharades.cache.GameCache;
 
+import java.io.Serializable;
+
 /**
  * Created by kishorekpendyala on 1/18/15.
  */
-public class Movie {
+public class Movie implements Serializable {
+
+    private static final long serialVersionUID = 1;
 
     private int movieId;
     private String movieName;

@@ -1,9 +1,14 @@
 package com.teabreaktechnology.dumcharades.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by kishorekpendyala on 1/18/15.
  */
-public class Game {
+public class Game implements Serializable {
+
+    private static final long serialVersionUID = 1;
+
     int gameId;
     String gameName;
 

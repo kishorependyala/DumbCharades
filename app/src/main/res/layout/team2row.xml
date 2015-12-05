@@ -5,17 +5,17 @@
     android:animateLayoutChanges="true"
     android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/editText"
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView2"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@android:drawable/dialog_holo_light_frame"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignStart="@+id/imageView"
+        android:layout_below="@+id/imageView"
         android:ems="10"
-        android:hint=""
-        android:singleLine="true">
-
+        android:hint="Enter player name">
         <requestFocus />
-    </EditText>
+    </AutoCompleteTextView>
 
     <ImageButton
         android:id="@+id/deleteForTeam2"
