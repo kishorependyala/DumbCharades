@@ -19,8 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.teabreaktechnology.dumcharades.cache.GameCache;
-import com.teabreaktechnology.util.AlertUtil;
-import com.teabreaktechnology.util.CommonConstants;
+import com.teabreaktechnology.dumcharades.util.AlertUtil;
+import com.teabreaktechnology.dumcharades.util.CommonConstants;
 
 import java.util.ArrayList;
 import java.util.List;

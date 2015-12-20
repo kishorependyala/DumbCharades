@@ -14,9 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.teabreaktechnology.util.AlertUtil;
-import com.teabreaktechnology.util.Constants;
-import com.teabreaktechnology.util.StringUtil;
+import com.teabreaktechnology.dumcharades.util.AlertUtil;
+import com.teabreaktechnology.dumcharades.util.Constants;
+import com.teabreaktechnology.dumcharades.util.StringUtil;
 
 
 public class HomeScreenActivity extends Activity {
