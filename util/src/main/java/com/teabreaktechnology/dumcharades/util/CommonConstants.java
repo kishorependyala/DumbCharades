@@ -1,4 +1,4 @@
-package com.teabreaktechnology.util;
+package com.teabreaktechnology.dumcharades.util;
 
 /**
  * Created by kishorekpendyala on 11/4/15.

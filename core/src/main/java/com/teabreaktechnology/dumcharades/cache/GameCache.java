@@ -5,8 +5,8 @@ import com.teabreaktechnology.dumcharades.bean.GamePlay;
 import com.teabreaktechnology.dumcharades.bean.Movie;
 import com.teabreaktechnology.dumcharades.bean.Player;
 import com.teabreaktechnology.dumcharades.bean.Team;
-import com.teabreaktechnology.util.CommonConstants;
-import com.teabreaktechnology.util.StringUtil;
+import com.teabreaktechnology.dumcharades.util.CommonConstants;
+import com.teabreaktechnology.dumcharades.util.StringUtil;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

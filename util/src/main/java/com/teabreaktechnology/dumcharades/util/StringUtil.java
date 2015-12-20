@@ -1,4 +1,4 @@
-package com.teabreaktechnology.util;
+package com.teabreaktechnology.dumcharades.util;
 
 import java.util.ArrayList;
 import java.util.List;

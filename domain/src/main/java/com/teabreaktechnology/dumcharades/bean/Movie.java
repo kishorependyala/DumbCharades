@@ -1,6 +1,5 @@
 package com.teabreaktechnology.dumcharades.bean;
 
-import com.teabreaktechnology.dumcharades.cache.GameCache;
 
 import java.io.Serializable;
 
@@ -13,7 +12,7 @@ public class Movie implements Serializable {
 
     private int movieId;
     private String movieName;
-    private GameCache.Language language;
+    private String language;
     private int year;
     private String cast;
     private String director;
@@ -56,7 +55,7 @@ public class Movie implements Serializable {
         return movieName;
     }
 
-    public GameCache.Language getLanguage() {
+    public String getLanguage() {
         return language;
     }
 
@@ -84,7 +83,7 @@ public class Movie implements Serializable {
 
         private int movieId;
         private String movieName;
-        private GameCache.Language language;
+        private String language;
         private int year;
         private String cast;
         private String director;
@@ -97,7 +96,7 @@ public class Movie implements Serializable {
             return this;
         }
 
-        public Builder language(GameCache.Language language) {
+        public Builder language(String language) {
             this.language = language;
             return this;
         }
