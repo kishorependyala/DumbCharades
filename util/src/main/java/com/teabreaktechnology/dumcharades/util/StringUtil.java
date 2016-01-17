@@ -12,7 +12,13 @@ import java.util.List;
 public class StringUtil {
 
 
-    /*Function to split a string*/
+    /**
+     * @param str       Sample "'string1,value','string2','string3'"
+     * @param delimiter delimiter for example ,
+     * @param encloseBy encloseBy example '
+     * @return return string array {"string1,value","string2","string3"}
+     */
+
     public static String[] split(String str, char delimiter, char encloseBy) {
 
         if (str == null || str.length() == 0) {
@@ -40,6 +46,9 @@ public class StringUtil {
                     isWithinEncloseBy = true;
                 } else {
                     isWithinEncloseBy = false;
+                    if (i == str.length() - 1) {
+                        tokens.add(token.toString());
+                    }
                 }
 
             } else {
@@ -61,9 +70,20 @@ public class StringUtil {
     }
 
 
-    public static boolean isValidString(String str) {
+    public static boolean isValidStringWithNonZeroLength(String str) {
         return str != null && !str.isEmpty();
     }
 
-
+    public static String strArrayToStr(String[] arr) {
+        StringBuilder sb = new StringBuilder();
+        for (String str : arr
+                ) {
+            sb.append(str);
+            sb.append(",");
+        }
+        if (sb.length() > 0)
+            return sb.substring(0, sb.length() - 1);
+        else
+            return sb.toString();
+    }
 }

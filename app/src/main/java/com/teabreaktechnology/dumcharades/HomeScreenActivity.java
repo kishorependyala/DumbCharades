@@ -66,11 +66,11 @@ public class HomeScreenActivity extends Activity {
 
                 String team2Name = team2EditText.getText().toString();
                 String team1Name = team1EditText.getText().toString();
-                if (!StringUtil.isValidString(team1Name)) {
+                if (!StringUtil.isValidStringWithNonZeroLength(team1Name)) {
                     AlertUtil.showAlertPopup("Enter valid name for first team", HomeScreenActivity.this);
                     return;
                 }
-                if (!StringUtil.isValidString(team2Name)) {
+                if (!StringUtil.isValidStringWithNonZeroLength(team2Name)) {
                     AlertUtil.showAlertPopup("Enter valid name for second team", HomeScreenActivity.this);
                     return;
                 }

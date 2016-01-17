@@ -11,10 +11,25 @@ public class Player implements Serializable {
     private int playerId;
     private String playerName;
 
-
     public Player(Builder builder) {
         this.playerId = builder.playerId;
         this.playerName = builder.playerName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Player player = (Player) o;
+
+        return playerId == player.playerId;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return playerId;
     }
 
     @Override
@@ -51,4 +66,6 @@ public class Player implements Serializable {
             return new Player(this);
         }
     }
+
+
 }
