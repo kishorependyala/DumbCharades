@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class GamePlay implements Serializable {
     private int gameId;
+    private int roundId;
     private int teamId;
     private int playerId;
     private int movieId;
@@ -18,6 +19,7 @@ public class GamePlay implements Serializable {
         this.teamId = builder.teamId;
         this.movieId = builder.teamId;
         this.score = builder.score;
+        this.roundId = builder.roundId;
     }
 
     @Override
@@ -25,6 +27,7 @@ public class GamePlay implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         sb.append("{ gameId :").append(gameId).append("}");
+        sb.append("{ roundId :").append(roundId).append("}");
         sb.append("{ teamId :").append(teamId).append("}");
         sb.append("{ playerId :").append(playerId).append("}");
         sb.append("{ movieId :").append(movieId).append("}");
@@ -56,6 +59,7 @@ public class GamePlay implements Serializable {
     public static class Builder {
 
         private int gameId;
+        private int roundId;
         private int teamId;
         private int playerId;
         private int movieId;
@@ -63,6 +67,11 @@ public class GamePlay implements Serializable {
 
         public Builder playerId(int playerId) {
             this.playerId = playerId;
+            return this;
+        }
+
+        public Builder roundId(int roundId) {
+            this.roundId = roundId;
             return this;
         }
 
@@ -89,5 +98,68 @@ public class GamePlay implements Serializable {
         public GamePlay build() {
             return new GamePlay(this);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GamePlay gamePlay = (GamePlay) o;
+
+        if (gameId != gamePlay.gameId) return false;
+        return roundId == gamePlay.roundId;
+
+    }
+
+    public static class Builder {
+
+        private int gameId;
+        private int roundId;
+        private int teamId;
+        private int playerId;
+        private int movieId;
+        private int score;
+
+        public Builder playerId(int playerId) {
+            this.playerId = playerId;
+            return this;
+        }
+
+        public Builder roundId(int roundId) {
+            this.roundId = roundId;
+            return this;
+        }
+
+        public Builder gameId(int gameId) {
+            this.gameId = gameId;
+            return this;
+        }
+
+        public Builder movieId(int movieId) {
+            this.movieId = movieId;
+            return this;
+        }
+
+        public Builder teamId(int teamId) {
+            this.teamId = teamId;
+            return this;
+        }
+
+        public Builder score(int score) {
+            this.score = score;
+            return this;
+        }
+
+        public GamePlay build() {
+            return new GamePlay(this);
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int result = gameId;
+        result = 31 * result + roundId;
+        return result;
     }
 }

@@ -9,8 +9,8 @@ public class Game implements Serializable {
 
     private static final long serialVersionUID = 1;
 
-    int gameId;
-    String gameName;
+    private int gameId;
+    private String gameName;
 
     public Game(Builder builder) {
         this.gameId = builder.gameId;
@@ -42,5 +42,41 @@ public class Game implements Serializable {
         public Game build() {
             return new Game(this);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Game game = (Game) o;
+
+        return gameId == game.gameId;
+
+    }
+
+    public static class Builder {
+
+        private int gameId;
+        private String gameName;
+
+        public Builder gameId(int gameId) {
+            this.gameId = gameId;
+            return this;
+        }
+
+        public Builder gameName(String gameName) {
+            this.gameName = gameName;
+            return this;
+        }
+
+        public Game build() {
+            return new Game(this);
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return gameId;
     }
 }
