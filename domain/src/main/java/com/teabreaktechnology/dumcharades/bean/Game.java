@@ -35,6 +35,11 @@ public class Game implements Serializable {
 
     }
 
+    @Override
+    public int hashCode() {
+        return gameId;
+    }
+
     public static class Builder {
 
         private int gameId;
@@ -54,6 +59,4 @@ public class Game implements Serializable {
             return new Game(this);
         }
     }
-
-
 }

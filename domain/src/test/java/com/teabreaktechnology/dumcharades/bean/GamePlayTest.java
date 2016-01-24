@@ -38,8 +38,7 @@ public class GamePlayTest extends TestCase {
         GamePlay gameplay1 = new GamePlay.Builder().gameId(1).roundId(1).build();
         GamePlay gameplay1Clone = new GamePlay.Builder().gameId(1).roundId(1).build();
 
-        assertEquals(true, gameplay1.hashCode() ==
-                gameplay1Clone.hashCode());
+        assertEquals(gameplay1.hashCode(), gameplay1Clone.hashCode());
 
         assertEquals(false, new GamePlay.Builder().gameId(1).roundId(2).build().hashCode() ==
                 new GamePlay.Builder().gameId(1).roundId(1).hashCode());
