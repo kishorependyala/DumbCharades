@@ -56,50 +56,6 @@ public class GamePlay implements Serializable {
         return score;
     }
 
-    public static class Builder {
-
-        private int gameId;
-        private int roundId;
-        private int teamId;
-        private int playerId;
-        private int movieId;
-        private int score;
-
-        public Builder playerId(int playerId) {
-            this.playerId = playerId;
-            return this;
-        }
-
-        public Builder roundId(int roundId) {
-            this.roundId = roundId;
-            return this;
-        }
-
-        public Builder gameId(int gameId) {
-            this.gameId = gameId;
-            return this;
-        }
-
-        public Builder movieId(int movieId) {
-            this.movieId = movieId;
-            return this;
-        }
-
-        public Builder teamId(int teamId) {
-            this.teamId = teamId;
-            return this;
-        }
-
-        public Builder score(int score) {
-            this.score = score;
-            return this;
-        }
-
-        public GamePlay build() {
-            return new GamePlay(this);
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -112,6 +68,13 @@ public class GamePlay implements Serializable {
 
     }
 
+    @Override
+    public int hashCode() {
+        int result = gameId;
+        result = 31 * result + roundId;
+        return result;
+    }
+
     public static class Builder {
 
         private int gameId;
@@ -154,12 +117,5 @@ public class GamePlay implements Serializable {
         public GamePlay build() {
             return new GamePlay(this);
         }
-    }
-
-    @Override
-    public int hashCode() {
-        int result = gameId;
-        result = 31 * result + roundId;
-        return result;
     }
 }

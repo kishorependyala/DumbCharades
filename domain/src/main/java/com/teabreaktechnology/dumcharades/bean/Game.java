@@ -24,26 +24,6 @@ public class Game implements Serializable {
         return sb.toString();
     }
 
-    public static class Builder {
-
-        private int gameId;
-        private String gameName;
-
-        public Builder gameId(int gameId) {
-            this.gameId = gameId;
-            return this;
-        }
-
-        public Builder gameName(String gameName) {
-            this.gameName = gameName;
-            return this;
-        }
-
-        public Game build() {
-            return new Game(this);
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,8 +55,5 @@ public class Game implements Serializable {
         }
     }
 
-    @Override
-    public int hashCode() {
-        return gameId;
-    }
+
 }
