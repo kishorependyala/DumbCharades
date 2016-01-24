@@ -6,8 +6,10 @@ targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
     testCompile group: 'junit', name: 'junit', version: '4.+'
 }
+
 
 sourceSets {
 
@@ -15,7 +17,14 @@ sourceSets {
         java {
             srcDirs = ["src/test/java"]
         }
+
     }
 
 }
+jar {
+    exclude("**/test/**")
+}
 
+dependencies {
+    compile 'junit:junit:4.12'
+}
