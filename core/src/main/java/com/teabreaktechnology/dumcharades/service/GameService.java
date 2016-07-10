@@ -1,0 +1,56 @@
+package com.teabreaktechnology.dumcharades.service;
+
+import com.teabreaktechnology.dumcharades.bean.GamePlay;
+
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * Created by kishorekpendyala on 1/18/15.
+ */
+public interface GameService extends Serializable {
+
+    int addTeam(String team1Name);
+
+    int addPlayer(String playerName);
+
+    void addPlayer(int gameId, int team1Id, int playerId);
+
+    void prepareMovieData(InputStream in, int difficultyLevel);
+
+    void addGamePlay(GamePlay gamePlay);
+
+    String getGameStatus();
+
+    int getNextPlayer(int gameId);
+
+    String getPlayerName(int nextPlayerId);
+
+    int getTeamId(int nextPlayerId);
+
+    int getRoundNumber();
+
+    String getTeamName(int teamId);
+
+    List<Integer> getTeams(int gameId);
+
+    /**
+     * Movie 1 4 2 5 7
+     * <p/>
+     * Step 1. Pick a random number equal to size of remaining Movie list (this case its 5)
+     * Step 2. Assuming random number is 1 (Is location in arrayList)
+     * Step 3 .We pick movie at id 1 in the list = We pick movie 4
+     * Step 4.Remove 4 and replay the steps again
+     * <p/>
+     * 1 2 5 7
+     * <p/>
+     * Next round if random number is 2 : we pick value at location 2 = 5 then remaining play list becomes 1 2 7
+     *
+     * @return next Movie
+     */
+    int getNextMovie();
+
+    String getMovieName(int nextMovieId);
+}
+

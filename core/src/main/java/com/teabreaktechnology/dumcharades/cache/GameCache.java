@@ -6,13 +6,7 @@ import com.teabreaktechnology.dumcharades.bean.Movie;
 import com.teabreaktechnology.dumcharades.bean.Player;
 import com.teabreaktechnology.dumcharades.bean.Team;
 import com.teabreaktechnology.dumcharades.util.CommonConstants;
-import com.teabreaktechnology.dumcharades.util.StringUtil;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,13 +18,12 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by kishorekpendyala on 1/18/15.
+ * Created by kishorekpendyala on 1/31/16.
  */
 public class GameCache implements Serializable {
+
     private static final long serialVersionUID = 1;
 
-    private static GameCache gameCache = null;
-    private static AtomicInteger movieCounter = new AtomicInteger(1);
     private Map<Integer, Player> playerMap = new HashMap<Integer, Player>();
     private Map<Integer, Team> teamMap = new HashMap<Integer, Team>();
     private Map<Integer, Movie> movieMap = new HashMap<Integer, Movie>();
@@ -45,112 +38,53 @@ public class GameCache implements Serializable {
     private int roundNumber = 0;
     private List<Integer> moviesPlayList = new ArrayList<Integer>();
 
-    private GameCache() {
 
-    }
-
-    public static final GameCache getInstance(boolean initialize) {
-        if (gameCache == null || initialize) {
-            gameCache = new GameCache();
-        }
-        return gameCache;
-    }
-
-    /*
-        Reads input csv movie file and creates a map of movie names
-        Language,Year,Title,Genre,Director,Cast,Level
+    /**
+     * @param teamName
+     * @return existing team id if already exists.
+     * If not create a new teamid, put it in the map and return the id
      */
-    public void run(InputStream in, int gameLevel) {
-
-        BufferedReader br = null;
-        String line = "";
-        String cvsSplitBy = ",";
-
-        try {
-
-
-            br = new BufferedReader(new InputStreamReader(in));
-            while ((line = br.readLine()) != null) {
-                if (line == null) {
-                    break;
-                }
-                if (line.startsWith("#") || line.startsWith("Y") || line.startsWith("y")) {
-                    System.out.println("line comment");
-                    continue;
-                }
-                // use comma as separator
-                String[] tokens = StringUtil.split(line);
-                //line.split(cvsSplitBy);
-                if (tokens.length < 4) {
-                    System.out.println("Breaking at line " + line);
-                    break;
-                }
-                String levelString = tokens[5];
-                int level = 1; //Setting default level to easy
-                if (levelString != null && levelString.length() != 0) {
-                    level = new Integer(levelString);
-                }
-
-                String movieName = tokens[1];
-                if (level != gameLevel) {
-                    System.out.println("Requested game level " + gameLevel + " level " + level + " ignored movie " + movieName);
-                    continue;
-                }
-
-                //Language language = Language.getLanguage(tokens[0]);
-                int year = new Integer(tokens[0]).intValue();
-
-                String genre = tokens[2];
-                String director = tokens[3];
-                String cast = tokens[4];
-
-                Integer movieId = movieCounter.getAndIncrement();
-
-                Movie movie = new Movie.Builder()
-                        .movieId(movieId)
-                        .year(year)
-                        .movieName(movieName)
-                                //.language(language)
-                        .genre(genre)
-                        .director(director)
-                        .cast(cast)
-                        .level(level)
-                        .build();
-                movieMap.put(movieId, movie);
-                System.out.println(" " + movie);
-
-            }
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+    public int addTeam(String teamName) {
+        Team team = getExistingTeam(teamName);
+        if (team == null) {
+            team = createTeam(teamName);
+            teamMap.put(team.getTeamId(), team);
         }
-
-        System.out.println("Done");
+        return team.getTeamId();
     }
 
+    private Team getExistingTeam(String teamName) {
+        Team existingTeam = null;
+        for (Map.Entry<Integer, Team> entry : teamMap.entrySet()) {
+            Integer existingTeamId = entry.getKey();
+            String existingTeamName = entry.getValue().getTeamName();
+            if (teamName.equalsIgnoreCase(existingTeamName)) {
+                existingTeam = entry.getValue();
+            }
+        }
+        return existingTeam;
+    }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{playerMap:").append(playerMap).append("}");
-        sb.append("{teamMap:").append(teamMap).append("}");
-        sb.append("{movieMap:").append(movieMap).append("}");
-        sb.append("{gameMap:").append(gameMap).append("}");
-        sb.append("{gameTeamsMap:").append(gameTeamsMap).append("}");
-        sb.append("{teamPlayersMap:").append(teamPlayersMap).append("}");
-        sb.append("{gamePlayMap:").append(gamePlayMap).append("}");
-        return sb.toString();
+    private Team createTeam(String teamName) {
+        int teamId = teamIdCounter.getAndIncrement();
+        return new Team.Builder().teamId(teamId).teamName(teamName).build();
+    }
+
+    public int addPlayer(String playerName) {
+        if (playerName == null || playerName.isEmpty()) {
+            return CommonConstants.EMPTY_PLAYERNAME;
+        }
+        for (Map.Entry<Integer, Player> entry : playerMap.entrySet()) {
+            Integer existingPlayerId = entry.getKey();
+            String existingPlayerName = entry.getValue().getPlayerName();
+            if (playerName.equalsIgnoreCase(existingPlayerName)) {
+                return CommonConstants.DUPLICATE_PLAYER;
+            }
+        }
+        int playerId = playerIdCounter.getAndIncrement();
+        Player player = new Player.Builder().playerId(playerId).playerName(playerName).build();
+        playerMap.put(playerId, player);
+        return playerId;
     }
 
     public void addPlayer(int gameId, int teamId, int playerId) {
@@ -171,48 +105,23 @@ public class GameCache implements Serializable {
         teams.add(team);
     }
 
-    public int addTeam(String teamName) {
-        if (teamName == null || teamName.isEmpty()) {
-            throw new IllegalArgumentException("Invalid team name");
-        }
-        for (Map.Entry<Integer, Team> entry : teamMap.entrySet()) {
-            Integer existingTeamId = entry.getKey();
-            String existingTeamName = entry.getValue().getTeamName();
-            if (teamName.equalsIgnoreCase(existingTeamName)) {
-                return existingTeamId;
-            }
-        }
-
-        int teamId = teamIdCounter.getAndIncrement();
-        Team team = new Team.Builder().teamId(teamId).teamName(teamName).build();
-        teamMap.put(teamId, team);
-        return teamId;
-    }
-
-    public int addPlayer(String playerName) {
-        if (playerName == null || playerName.isEmpty()) {
-            return CommonConstants.EMPTY_PLAYERNAME;
-        }
-        for (Map.Entry<Integer, Player> entry : playerMap.entrySet()) {
-            Integer existingPlayerId = entry.getKey();
-            String existingPlayerName = entry.getValue().getPlayerName();
-            if (playerName.equalsIgnoreCase(existingPlayerName)) {
-                return CommonConstants.DUPLICATE_PLAYER;
-            }
-        }
-        int playerId = playerIdCounter.getAndIncrement();
-        Player player = new Player.Builder().playerId(playerId).playerName(playerName).build();
-        playerMap.put(playerId, player);
-        return playerId;
-    }
 
     /**
-     * 1. First pick next team to play
-     * 2. Loop through eac
-     *
      * @param gameId
-     * @return
+     * @return next team to play
      */
+    public int getNextTeamToPlay(int gameId) {
+
+        Set<Team> teams = gameTeamsMap.get(gameId);
+        for (Team team : teams) {
+            if (team.getTeamId() != lastPlayedTeamId) {
+                lastPlayedTeamId = team.getTeamId();
+                return lastPlayedTeamId;
+            }
+        }
+        throw new IllegalStateException("Cannot reach this block");
+    }
+
 
     public int getNextPlayer(int gameId) {
         int nextTeamToPlay = getNextTeamToPlay(gameId);
@@ -256,22 +165,6 @@ public class GameCache implements Serializable {
             }
         }
         throw new IllegalStateException("Code should never come here");
-    }
-
-    /**
-     * @param gameId
-     * @return next team to play
-     */
-    public int getNextTeamToPlay(int gameId) {
-
-        Set<Team> teams = gameTeamsMap.get(gameId);
-        for (Team team : teams) {
-            if (team.getTeamId() != lastPlayedTeamId) {
-                lastPlayedTeamId = team.getTeamId();
-                return lastPlayedTeamId;
-            }
-        }
-        throw new IllegalStateException("Cannot reach this block");
     }
 
     public String getPlayerName(int playerId) {
@@ -321,7 +214,6 @@ public class GameCache implements Serializable {
         if (moviesPlayList.isEmpty()) {
             moviesPlayList.addAll(movieMap.keySet());
         }
-
         int remainingMovies = moviesPlayList.size();
         int nextMovieToPlayId = new Random().nextInt(remainingMovies);
         int nextMovieIndex = moviesPlayList.get(nextMovieToPlayId);
@@ -374,14 +266,28 @@ public class GameCache implements Serializable {
         return score;
     }
 
-    public enum Language {
-        ENGLISH, HINDI, TELUGU;
-
-        public static Language getLanguage(String str) {
-            if ("HINDI".equalsIgnoreCase(str)) {
-                return HINDI;
-            } else return TELUGU;
+    public void addMovies(List<Movie> movies) {
+        for (Movie movie : movies) {
+            movieMap.put(movie.getMovieId(), movie);
         }
     }
-}
 
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{playerMap:").append(playerMap).append("}");
+        sb.append("{teamMap:").append(teamMap).append("}");
+        sb.append("{movieMap:").append(movieMap).append("}");
+        sb.append("{gameMap:").append(gameMap).append("}");
+        sb.append("{gameTeamsMap:").append(gameTeamsMap).append("}");
+        sb.append("{teamPlayersMap:").append(teamPlayersMap).append("}");
+        sb.append("{gamePlayMap:").append(gamePlayMap).append("}");
+        return sb.toString();
+    }
+
+    public List<Integer> getTeams(int gameId) {
+        return new ArrayList<>(this.teamMap.keySet());
+
+    }
+}

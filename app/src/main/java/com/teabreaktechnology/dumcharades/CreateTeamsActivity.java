@@ -18,7 +18,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.teabreaktechnology.dumcharades.cache.GameCache;
+import com.teabreaktechnology.dumcharades.service.GameService;
+import com.teabreaktechnology.dumcharades.service.GameServiceImpl;
 import com.teabreaktechnology.dumcharades.util.AlertUtil;
 import com.teabreaktechnology.dumcharades.util.CommonConstants;
 
@@ -78,12 +79,12 @@ public class CreateTeamsActivity extends Activity {
                 mp.start();
                 Intent startGameIntent = new Intent(CreateTeamsActivity.this, GamePlayActivity.class);
 
-                GameCache gameCache = GameCache.getInstance(true);
+                GameService gameService = GameServiceImpl.getInstance(false);
 
                 StringBuilder errorString = new StringBuilder();
 
-                int team1Id = gameCache.addTeam(team1Name);
-                int team2Id = gameCache.addTeam(team2Name);
+                int team1Id = gameService.addTeam(team1Name);
+                int team2Id = gameService.addTeam(team2Name);
                 int gameId = 1;
 
                 int playersInTeam1 = 0;
@@ -92,15 +93,14 @@ public class CreateTeamsActivity extends Activity {
                     EditText editText = (EditText) childAt.findViewById(R.id.autoCompleteTextView1);
                     String playerName = editText.getText().toString();
                     System.out.println("player name " + playerName + " " + playerName.length());
-                    int playerId = gameCache.addPlayer(playerName);
+                    int playerId = gameService.addPlayer(playerName);
 
                     if (playerId == CommonConstants.DUPLICATE_PLAYER) {
                         errorString.append("Duplicate player in Team 1, " + playerName + "\n");
                     }
                     if (playerId == CommonConstants.EMPTY_PLAYERNAME) {
-                        //errorString.append("Empty player name in Team 1 \n");
                     } else {
-                        gameCache.addPlayer(gameId, team1Id, playerId);
+                        gameService.addPlayer(gameId, team1Id, playerId);
                         playersInTeam1++;
                     }
                 }
@@ -116,16 +116,14 @@ public class CreateTeamsActivity extends Activity {
                     EditText editText = (EditText) childAt.findViewById(R.id.autoCompleteTextView2);
                     String playerName = editText.getText().toString();
                     System.out.println("player name " + playerName + " " + playerName.length());
-                    int playerId = gameCache.addPlayer(playerName);
-                    //gameCache.addPlayer(gameId, team2Id, playerId);
+                    int playerId = gameService.addPlayer(playerName);
 
                     if (playerId == CommonConstants.DUPLICATE_PLAYER) {
                         errorString.append("Duplicate player in Team 2, " + playerName + "\n");
                     }
                     if (playerId == CommonConstants.EMPTY_PLAYERNAME) {
-                        //errorString.append("Empty player name in Team 2 \n");
                     } else {
-                        gameCache.addPlayer(gameId, team2Id, playerId);
+                        gameService.addPlayer(gameId, team2Id, playerId);
                         playersInTeam2++;
                     }
                 }

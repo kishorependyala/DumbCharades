@@ -135,6 +135,23 @@
             android:text="New Game"
             android:textStyle="italic" />
 
+        <TextView
+            android:id="@+id/spacer4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/padding"
+            android:fontFamily="serif"
+            android:text=""
+            android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/expressStartButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/colors"
+            android:fontFamily="serif"
+            android:text="Express Start"
+            android:textStyle="italic" />
 
     </LinearLayout>
 

@@ -79,6 +79,22 @@ public class Movie implements Serializable {
         return genre;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Movie movie = (Movie) o;
+
+        return movieId == movie.movieId;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return movieId;
+    }
+
     public static class Builder {
 
         private int movieId;
@@ -135,21 +151,5 @@ public class Movie implements Serializable {
         public Movie build() {
             return new Movie(this);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Movie movie = (Movie) o;
-
-        return movieId == movie.movieId;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return movieId;
     }
 }

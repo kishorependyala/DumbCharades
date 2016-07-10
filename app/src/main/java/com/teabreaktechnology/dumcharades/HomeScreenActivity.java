@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.teabreaktechnology.dumcharades.service.GameService;
+import com.teabreaktechnology.dumcharades.service.GameServiceImpl;
 import com.teabreaktechnology.dumcharades.util.AlertUtil;
 import com.teabreaktechnology.dumcharades.util.Constants;
 import com.teabreaktechnology.dumcharades.util.StringUtil;
@@ -32,23 +34,19 @@ public class HomeScreenActivity extends Activity {
         setContentView(R.layout.activity_home_screen);
 
 
-        final EditText team1EditText = (EditText) findViewById(R.id.team1Name);
-        final EditText team2EditText = (EditText) findViewById(R.id.team2Name);
-        team1EditText.setText("Team 1");
-        team2EditText.setText("Team 2");
-
         Button createGameButton = (Button) findViewById(R.id.createGameButton);
+
+        Button expressStartButton = (Button) findViewById(R.id.expressStartButton);
 
 
         final Spinner timeIntervalSpinner = (Spinner) findViewById(R.id.timeIntervalForEachPlay);
         ArrayAdapter<String> timeIntervalAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Constants.timeIntervals);
         timeIntervalSpinner.setAdapter(timeIntervalAdapter);
-        timeIntervalSpinner.setSelection(1);
+        timeIntervalSpinner.setSelection(2);
 
         final Spinner languageSpinner = (Spinner) findViewById(R.id.language);
         ArrayAdapter<String> languageAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Constants.languages);
         languageSpinner.setAdapter(languageAdapter);
-
 
 
         final Spinner difficultyLevelSpinner = (Spinner) findViewById(R.id.difficultyLevel);
@@ -62,40 +60,73 @@ public class HomeScreenActivity extends Activity {
         createGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mp.start();
-
-                String team2Name = team2EditText.getText().toString();
-                String team1Name = team1EditText.getText().toString();
-                if (!StringUtil.isValidStringWithNonZeroLength(team1Name)) {
-                    AlertUtil.showAlertPopup("Enter valid name for first team", HomeScreenActivity.this);
-                    return;
-                }
-                if (!StringUtil.isValidStringWithNonZeroLength(team2Name)) {
-                    AlertUtil.showAlertPopup("Enter valid name for second team", HomeScreenActivity.this);
-                    return;
-                }
-                if (team1Name.equalsIgnoreCase(team2Name)) {
-                    AlertUtil.showAlertPopup("Both team names cannot be the same", HomeScreenActivity.this);
-                    return;
-                }
-
-                int selectedId = timeIntervalSpinner.getSelectedItemPosition();
-                String timeIntervalForEachPlay = Constants.timeIntervalInSeconds[selectedId];
-                String language = (String) languageSpinner.getSelectedItem();
-
-                int selectedDifficultyLevelId = difficultyLevelSpinner.getSelectedItemPosition();
-                int selectedDifficultyLevel = Constants.difficultyLevel[selectedDifficultyLevelId];
-
                 Intent createTeamsIntent = new Intent(HomeScreenActivity.this, CreateTeamsActivity.class);
-                createTeamsIntent.putExtra("team1Name", team1Name);
-                createTeamsIntent.putExtra("team2Name", team2Name);
+                createTeamsIntent(createTeamsIntent, mp, timeIntervalSpinner, languageSpinner, difficultyLevelSpinner);
 
-                createTeamsIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
-                createTeamsIntent.putExtra("language", language);
-                createTeamsIntent.putExtra("difficultyLevel", selectedDifficultyLevel);
                 startActivity(createTeamsIntent);
             }
         });
+
+        expressStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gamePlayIntent = new Intent(HomeScreenActivity.this, GamePlayActivity.class);
+                createTeamsIntent(gamePlayIntent, mp, timeIntervalSpinner, languageSpinner, difficultyLevelSpinner);
+
+                GameService gameService = GameServiceImpl.getInstance(false);
+                int gameId = 1;
+
+                for (int teamId : gameService.getTeams(gameId)) {
+                    String teamName = gameService.getTeamName(teamId);
+                    int playerId = gameService.addPlayer(teamName + " player ");
+                    gameService.addPlayer(gameId, teamId, playerId);
+                }
+                gamePlayIntent.putExtra("gameId", gameId + "");
+                startActivity(gamePlayIntent);
+            }
+        });
+    }
+
+    private Intent createTeamsIntent(Intent createTeamsIntent, MediaPlayer mp, Spinner timeIntervalSpinner, Spinner languageSpinner, Spinner difficultyLevelSpinner) {
+        mp.start();
+
+        final EditText team1EditText = (EditText) findViewById(R.id.team1Name);
+        final EditText team2EditText = (EditText) findViewById(R.id.team2Name);
+        team1EditText.setText("Team 1");
+        team2EditText.setText("Team 2");
+
+        String team2Name = team2EditText.getText().toString();
+        String team1Name = team1EditText.getText().toString();
+        if (!StringUtil.isValidStringWithNonZeroLength(team1Name)) {
+            AlertUtil.showAlertPopup("Enter valid name for first team", HomeScreenActivity.this);
+            return null;
+        }
+        if (!StringUtil.isValidStringWithNonZeroLength(team2Name)) {
+            AlertUtil.showAlertPopup("Enter valid name for second team", HomeScreenActivity.this);
+            return null;
+        }
+        if (team1Name.equalsIgnoreCase(team2Name)) {
+            AlertUtil.showAlertPopup("Both team names cannot be the same", HomeScreenActivity.this);
+            return null;
+        }
+
+        int selectedId = timeIntervalSpinner.getSelectedItemPosition();
+        String timeIntervalForEachPlay = Constants.timeIntervalInSeconds[selectedId];
+        String language = (String) languageSpinner.getSelectedItem();
+
+        int selectedDifficultyLevelId = difficultyLevelSpinner.getSelectedItemPosition();
+        int selectedDifficultyLevel = Constants.difficultyLevel[selectedDifficultyLevelId];
+
+
+        createTeamsIntent.putExtra("team1Name", team1Name);
+        createTeamsIntent.putExtra("team2Name", team2Name);
+        GameService gameService = GameServiceImpl.getInstance(true);
+        gameService.addTeam(team1Name);
+        gameService.addTeam(team2Name);
+        createTeamsIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
+        createTeamsIntent.putExtra("language", language);
+        createTeamsIntent.putExtra("difficultyLevel", selectedDifficultyLevel);
+        return createTeamsIntent;
     }
 
     @Override

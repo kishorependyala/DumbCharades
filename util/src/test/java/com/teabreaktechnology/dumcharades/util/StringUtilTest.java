@@ -42,9 +42,4 @@ public class StringUtilTest {
         assertTrue(StringUtil.isValidStringWithNonZeroLength(null) == false);
 
     }
-
-    @Test
-    public void testStrArrayToStr() throws Exception {
-
-    }
 }

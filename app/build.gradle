@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "19.1.0"
+    buildToolsVersion "21.0.0"
 
     defaultConfig {
         applicationId "com.teabreaktechnology.dumcharades"
@@ -20,6 +20,9 @@ android {
         }
     }
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
 }
 
 dependencies {
@@ -27,4 +30,5 @@ dependencies {
     compile project(':core')
     compile project(':domain')
     compile project(':util')
+    compile 'junit:junit:4.12'
 }

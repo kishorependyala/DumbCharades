@@ -31,6 +31,22 @@ public class Team implements Serializable {
         return teamName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Team team = (Team) o;
+
+        return teamId == team.teamId;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return teamId;
+    }
+
     public static class Builder {
 
         private int teamId;
@@ -49,21 +65,5 @@ public class Team implements Serializable {
         public Team build() {
             return new Team(this);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Team team = (Team) o;
-
-        return teamId == team.teamId;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return teamId;
     }
 }
