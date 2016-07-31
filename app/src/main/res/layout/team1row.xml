@@ -16,7 +16,7 @@
 
         android:hint="Enter player name">
 
-    <requestFocus />
+        <requestFocus />
     </AutoCompleteTextView>
 
     <ImageButton

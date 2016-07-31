@@ -1,10 +1,13 @@
 package com.teabreaktechnology.dumcharades.service;
 
+import com.teabreaktechnology.dumcharades.bean.GameInfo;
 import com.teabreaktechnology.dumcharades.bean.GamePlay;
+import com.teabreaktechnology.dumcharades.bean.Player;
 
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by kishorekpendyala on 1/18/15.
@@ -52,5 +55,19 @@ public interface GameService extends Serializable {
     int getNextMovie();
 
     String getMovieName(int nextMovieId);
+
+    int getCurrentGameId();
+
+    List<String> getExistingGames();
+
+    String toString();
+
+    GameInfo createNewGame();
+
+    void setCurrentGame(int selectedGame);
+
+    int getGameId(String gameName);
+
+    Set<Player> getPlayers(int team1Id);
 }
 

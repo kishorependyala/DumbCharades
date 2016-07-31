@@ -266,7 +266,7 @@ Intent createTeamsIntent = getParentActivityIntent();
     private AlertDialog AskOption() {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 .setTitle("Exit")
-                .setMessage("Are you sure you want to exit?")
+                .setMessage("Are you sure you want to go back?")
 
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {

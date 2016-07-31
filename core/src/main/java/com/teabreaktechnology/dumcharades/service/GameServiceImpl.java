@@ -1,7 +1,9 @@
 package com.teabreaktechnology.dumcharades.service;
 
+import com.teabreaktechnology.dumcharades.bean.GameInfo;
 import com.teabreaktechnology.dumcharades.bean.GamePlay;
 import com.teabreaktechnology.dumcharades.bean.Movie;
+import com.teabreaktechnology.dumcharades.bean.Player;
 import com.teabreaktechnology.dumcharades.cache.GameCache;
 import com.teabreaktechnology.dumcharades.util.CommonConstants;
 import com.teabreaktechnology.dumcharades.util.StringUtil;
@@ -13,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -34,7 +37,7 @@ public class GameServiceImpl implements GameService {
 
 
     /**
-     * 1. Extract movie names from the file
+     * 1. Extract movie names from the file d
      * 2. Set int {@link GameCache}
      *
      * @param in
@@ -138,6 +141,29 @@ public class GameServiceImpl implements GameService {
         return gameCache.toString();
     }
 
+    @Override
+    public GameInfo createNewGame() {
+        return gameCache.createNewGame();
+
+    }
+
+    @Override
+    public void setCurrentGame(int selectedGame) {
+        this.gameCache.setCurrentGame(selectedGame);
+
+    }
+
+    @Override
+    public int getGameId(String gameName) {
+
+        return this.gameCache.getGameId(gameName);
+    }
+
+    @Override
+    public Set<Player> getPlayers(int teamId) {
+        return gameCache.getPlayers(teamId);
+    }
+
 
     public int addTeam(String teamName) {
         return gameCache.addTeam(teamName);
@@ -220,4 +246,13 @@ public class GameServiceImpl implements GameService {
         return gameCache.getGameStatus();
     }
 
+    @Override
+    public int getCurrentGameId(){
+        return gameCache.getCurrentGameId();
+    }
+
+    @Override
+    public List<String> getExistingGames() {
+        return gameCache.getExistingGames();
+    }
 }

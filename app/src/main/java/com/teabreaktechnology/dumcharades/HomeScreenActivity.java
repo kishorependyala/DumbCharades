@@ -20,6 +20,8 @@ import com.teabreaktechnology.dumcharades.util.AlertUtil;
 import com.teabreaktechnology.dumcharades.util.Constants;
 import com.teabreaktechnology.dumcharades.util.StringUtil;
 
+import java.util.List;
+
 
 public class HomeScreenActivity extends Activity {
 
@@ -33,11 +35,12 @@ public class HomeScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-
+        GameService gameService = GameServiceImpl.getInstance(true);
+        gameService.createNewGame();
+        gameService.createNewGame();
         Button createGameButton = (Button) findViewById(R.id.createGameButton);
 
         Button expressStartButton = (Button) findViewById(R.id.expressStartButton);
-
 
         final Spinner timeIntervalSpinner = (Spinner) findViewById(R.id.timeIntervalForEachPlay);
         ArrayAdapter<String> timeIntervalAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Constants.timeIntervals);
@@ -53,6 +56,8 @@ public class HomeScreenActivity extends Activity {
         ArrayAdapter<String> difficultyLevelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Constants.difficultyLevelForDropDown);
         difficultyLevelSpinner.setAdapter(difficultyLevelAdapter);
 
+        final Spinner existingGamesSpinner = getExistingGameSpinner(gameService);
+
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -61,7 +66,7 @@ public class HomeScreenActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent createTeamsIntent = new Intent(HomeScreenActivity.this, CreateTeamsActivity.class);
-                createTeamsIntent(createTeamsIntent, mp, timeIntervalSpinner, languageSpinner, difficultyLevelSpinner);
+                createTeamsIntent(createTeamsIntent, mp, timeIntervalSpinner, languageSpinner, difficultyLevelSpinner, existingGamesSpinner);
 
                 startActivity(createTeamsIntent);
             }
@@ -71,10 +76,10 @@ public class HomeScreenActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent gamePlayIntent = new Intent(HomeScreenActivity.this, GamePlayActivity.class);
-                createTeamsIntent(gamePlayIntent, mp, timeIntervalSpinner, languageSpinner, difficultyLevelSpinner);
+                createTeamsIntent(gamePlayIntent, mp, timeIntervalSpinner, languageSpinner, difficultyLevelSpinner, existingGamesSpinner);
 
                 GameService gameService = GameServiceImpl.getInstance(false);
-                int gameId = 1;
+                int gameId = gameService.getCurrentGameId();
 
                 for (int teamId : gameService.getTeams(gameId)) {
                     String teamName = gameService.getTeamName(teamId);
@@ -87,7 +92,17 @@ public class HomeScreenActivity extends Activity {
         });
     }
 
-    private Intent createTeamsIntent(Intent createTeamsIntent, MediaPlayer mp, Spinner timeIntervalSpinner, Spinner languageSpinner, Spinner difficultyLevelSpinner) {
+    private Spinner getExistingGameSpinner(GameService gameService) {
+        List<String> existingGames = gameService.getExistingGames();
+        System.out.println(existingGames);
+
+        final Spinner existingGamesSpinner = (Spinner) findViewById(R.id.existingGamesSpinner);
+        ArrayAdapter<String> existingGamesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, existingGames);
+        existingGamesSpinner.setAdapter(existingGamesAdapter);
+        return existingGamesSpinner;
+    }
+
+    private Intent createTeamsIntent(Intent createTeamsIntent, MediaPlayer mp, Spinner timeIntervalSpinner, Spinner languageSpinner, Spinner difficultyLevelSpinner, Spinner existingGamesSpinner) {
         mp.start();
 
         final EditText team1EditText = (EditText) findViewById(R.id.team1Name);
@@ -117,10 +132,18 @@ public class HomeScreenActivity extends Activity {
         int selectedDifficultyLevelId = difficultyLevelSpinner.getSelectedItemPosition();
         int selectedDifficultyLevel = Constants.difficultyLevel[selectedDifficultyLevelId];
 
+        Object existingGameObj = existingGamesSpinner.getSelectedItem();
 
+        GameService gameService = GameServiceImpl.getInstance(false);
+        if(existingGameObj==null) {
+            gameService.createNewGame();
+        }else{
+
+            int selectedGame = gameService.getGameId(existingGameObj.toString());
+            gameService.setCurrentGame(selectedGame);
+        }
         createTeamsIntent.putExtra("team1Name", team1Name);
         createTeamsIntent.putExtra("team2Name", team2Name);
-        GameService gameService = GameServiceImpl.getInstance(true);
         gameService.addTeam(team1Name);
         gameService.addTeam(team2Name);
         createTeamsIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
@@ -151,5 +174,13 @@ public class HomeScreenActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
 
+        super.onResume();
+        System.out.println("Entered onResume");
+        GameService instance = GameServiceImpl.getInstance(false);
+        System.out.println(instance.toString());
+        getExistingGameSpinner(instance);
+    }
 }

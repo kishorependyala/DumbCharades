@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.teabreaktechnology.dumcharades.bean.Player;
 import com.teabreaktechnology.dumcharades.service.GameService;
 import com.teabreaktechnology.dumcharades.service.GameServiceImpl;
 import com.teabreaktechnology.dumcharades.util.AlertUtil;
@@ -25,6 +26,7 @@ import com.teabreaktechnology.dumcharades.util.CommonConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 public class CreateTeamsActivity extends Activity {
@@ -46,29 +48,34 @@ public class CreateTeamsActivity extends Activity {
 
         contactNames = getAllContactNames();
 
+        GameService gameService = GameServiceImpl.getInstance(false);
+
         Bundle extras = getIntent().getExtras();
 
-        final String team1Name = extras.getString("team1Name");
-        final String team2Name = extras.getString("team2Name");
+
         final String language = extras.getString("language");
         final String timeIntervalForEachPlay = extras.getString("timeIntervalForEachPlay");
         final Integer difficultyLevel = extras.getInt("difficultyLevel");
 
+        List<Integer> teams = gameService.getTeams(gameService.getCurrentGameId());
+
+        Integer team1Id = teams.get(0);
+        final String team1Name = gameService.getTeamName(team1Id);
+        Integer team2Id = teams.get(1);
+        final String team2Name = gameService.getTeamName(team2Id);
         TextView team1TextView = (TextView) findViewById(R.id.team1NameTextView);
         TextView team2TextView = (TextView) findViewById(R.id.team2NameTextView);
-
-        Button startGameButton = (Button) findViewById(R.id.startGameButton);
-
         team1TextView.setText(team1Name);
         team2TextView.setText(team2Name);
 
         team1LinearLayout = (LinearLayout) findViewById(R.id.team1LinearLayout);
         team2LinearLayout = (LinearLayout) findViewById(R.id.team2LinearLayout);
 
-        inflateEditRow("player " + nextPlayerId(), team1LinearLayout);
-        inflateEditRow("player " + nextPlayerId(), team1LinearLayout);
-        inflateEditRow("player " + nextPlayerId(), team2LinearLayout);
-        inflateEditRow("player " + nextPlayerId(), team2LinearLayout);
+        populateTeams(gameService, team1Id, team1LinearLayout);
+        populateTeams(gameService, team2Id, team2LinearLayout);
+
+
+        Button startGameButton = (Button) findViewById(R.id.startGameButton);
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -85,7 +92,7 @@ public class CreateTeamsActivity extends Activity {
 
                 int team1Id = gameService.addTeam(team1Name);
                 int team2Id = gameService.addTeam(team2Name);
-                int gameId = 1;
+                int gameId = gameService.getCurrentGameId();
 
                 int playersInTeam1 = 0;
                 for (int i = 0; i < team1LinearLayout.getChildCount() - 1; i++) {
@@ -152,6 +159,21 @@ public class CreateTeamsActivity extends Activity {
         });
     }
 
+    private void populateTeams(GameService gameService, Integer team1Id, LinearLayout layout) {
+        final Set<Player> players = gameService.getPlayers(team1Id);
+
+        if (players==null||players.isEmpty()) {
+            nextPlayerId();
+            nextPlayerId();
+            inflateEditRow("", layout);
+            inflateEditRow("", layout);
+        } else {
+            for (Player player : players) {
+                inflateEditRow(player.getPlayerName(), layout);
+            }
+        }
+    }
+
     private List<String> getAllContactNames() {
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         List<String> contactNames = new ArrayList<String>();
@@ -205,19 +227,25 @@ public class CreateTeamsActivity extends Activity {
 
 
         linearLayout.addView(rowView, linearLayout.getChildCount() - 1);
+        AutoCompleteTextView textView2 = null;
         if (linearLayout == team1LinearLayout) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_dropdown_item_1line, contactNames);
-            AutoCompleteTextView textView2 = (AutoCompleteTextView)
+            textView2 = (AutoCompleteTextView)
                     rowView.findViewById(R.id.autoCompleteTextView1);
+
             textView2.setAdapter(adapter);
         } else {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_dropdown_item_1line, contactNames);
-            AutoCompleteTextView textView2 = (AutoCompleteTextView)
+            textView2 = (AutoCompleteTextView)
                     rowView.findViewById(R.id.autoCompleteTextView2);
+
             textView2.setAdapter(adapter);
 
+        }
+        if(!name.isEmpty()){
+            textView2.setText(name);
         }
     }
 
