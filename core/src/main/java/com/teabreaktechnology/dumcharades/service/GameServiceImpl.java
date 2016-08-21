@@ -193,6 +193,11 @@ public class GameServiceImpl implements GameService {
         return gameCache.getNextPlayer(gameId);
     }
 
+    @Override
+    public int skipToNextPlayer(int gameId) {
+        return gameCache.skipToNextPlayer(gameId);
+    }
+
 
     /**
      * @param gameId

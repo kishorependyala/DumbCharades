@@ -33,7 +33,7 @@ public class HomeScreenActivity extends Activity {
     @TargetApi(16)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_screen);
+        setContentView(R.layout.activity_new_screen);
 
         GameService gameService = GameServiceImpl.getInstance(true);
         gameService.createNewGame();
@@ -107,8 +107,8 @@ public class HomeScreenActivity extends Activity {
 
         final EditText team1EditText = (EditText) findViewById(R.id.team1Name);
         final EditText team2EditText = (EditText) findViewById(R.id.team2Name);
-        team1EditText.setText("Team 1");
-        team2EditText.setText("Team 2");
+        if(team1EditText.getText().toString().isEmpty())team1EditText.setText("Team 1");
+        if(team2EditText.getText().toString().isEmpty())team2EditText.setText("Team 2");
 
         String team2Name = team2EditText.getText().toString();
         String team1Name = team1EditText.getText().toString();

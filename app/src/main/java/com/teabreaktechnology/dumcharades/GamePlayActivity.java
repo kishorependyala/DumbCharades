@@ -1,16 +1,20 @@
 package com.teabreaktechnology.dumcharades;
 
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.teabreaktechnology.dumcharades.bean.GamePlay;
@@ -18,6 +22,7 @@ import com.teabreaktechnology.dumcharades.service.GameService;
 import com.teabreaktechnology.dumcharades.service.GameServiceImpl;
 
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 
@@ -39,14 +44,19 @@ public class GamePlayActivity extends Activity {
     CountDownTimer countDownTimer;
     Button nextPlayButton;
     Button correctButton;
+    Button skipButton;
+    Button skipMovie;
     MediaPlayer mp;
+    int noOfSkips = 0;
+    AlertDialog.Builder builder;
+     GameService gameService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
 
-        final GameService gameService = GameServiceImpl.getInstance(false);
+        gameService = GameServiceImpl.getInstance(false);
         Bundle extras = getIntent().getExtras();
         final String language = extras.getString("language");
         final Integer difficultyLevel = extras.getInt("difficultyLevel");
@@ -76,12 +86,42 @@ public class GamePlayActivity extends Activity {
 
         nextPlayButton = (Button) findViewById(R.id.nextPlayButton);
         correctButton = (Button) findViewById(R.id.correctButton);
+        skipButton = (Button) findViewById(R.id.skip);
+        skipMovie = (Button) findViewById(R.id.skipMovie);
 
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.button3);
 
         setNextPlayReadyState(gameService, gameId);
-        correctButton.setVisibility(View.INVISIBLE);
+
+
+
+        setVisibility(View.INVISIBLE);
+
+
+        scoreAlert();
+
+        skipButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(countDownTimer!=null) countDownTimer.cancel();
+                setVisibility(View.INVISIBLE);
+                nextPlayButton.setBackgroundResource(R.drawable.play);
+                skipAndSetNextPlayReadyState(gameService, gameId);
+                currentState = PLAY;
+            }
+        });
+
+        skipMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(countDownTimer!=null) countDownTimer.cancel();
+                noOfSkips++;
+                nextPlay(gameId, gameService, currentTimeValue, eachPlayTime);
+
+            }
+        });
 
         nextPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,25 +129,17 @@ public class GamePlayActivity extends Activity {
                 mp.start();
 
                 if (currentState == PLAY) {
-                    GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
-                    gameService.addGamePlay(gamePlay);
-                    scoreBoardVIew.setText(gameService.getGameStatus());
-                    nextPlayButton.setBackgroundResource(R.drawable.pause);
-                    currentState = PAUSE;
-                    correctButton.setVisibility(View.VISIBLE);
-                    currentTimeValue.set(eachPlayTime);
-                    startTimer(gameService, gameId, currentTimeValue);
-                    setNextPlay(gameService, gameId);
+                    nextPlay(gameId, gameService, currentTimeValue, eachPlayTime);
 
                 } else if (currentState == PAUSE) {
                     currentState = RESUME;
                     nextPlayButton.setBackgroundResource(R.drawable.play);
-                    correctButton.setVisibility(View.INVISIBLE);
+                    setVisibility(View.INVISIBLE);
                     countDownTimer.cancel();
                 } else if (currentState == RESUME) {
                     currentState = PAUSE;
                     nextPlayButton.setBackgroundResource(R.drawable.pause);
-                    correctButton.setVisibility(View.VISIBLE);
+                    setVisibility(View.VISIBLE);
                     startTimer(gameService, gameId, currentTimeValue);
                     countDownTimer.start();
                 }
@@ -126,14 +158,61 @@ public class GamePlayActivity extends Activity {
                 setNextPlayReadyState(gameService, gameId);
 
                 currentState = PLAY;
-                correctButton.setVisibility(View.INVISIBLE);
+                setVisibility(View.INVISIBLE);
                 countDownTimer.cancel();
                 timerTextView.setText("");
+                noOfSkips = 0;
 
             }
         });
 
 
+    }
+
+    private void scoreAlert() {
+
+        builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Movie Name guess");
+        builder.setMessage("Did they get it right?");
+
+        builder.setPositiveButton("CORRECT", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                setScore(1);
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("WRONG", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setScore(0);
+
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void setVisibility(int visibility) {
+        correctButton.setVisibility(visibility);
+        skipMovie.setVisibility(visibility);
+    }
+
+    private void nextPlay(int gameId, GameService gameService, AtomicLong currentTimeValue, int eachPlayTime) {
+        GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
+        gameService.addGamePlay(gamePlay);
+        scoreBoardVIew.setText(gameService.getGameStatus());
+        nextPlayButton.setBackgroundResource(R.drawable.pause);
+        currentState = PAUSE;
+        setVisibility(View.VISIBLE);
+        if(noOfSkips == 0) {
+            currentTimeValue.set(eachPlayTime);
+        }
+        startTimer(gameService, gameId, currentTimeValue);
+
+        setNextPlay(gameService, gameId);
     }
 
     private void startTimer(final GameService gameService, final int gameId, final AtomicLong currentTimeValue) {
@@ -143,6 +222,7 @@ public class GamePlayActivity extends Activity {
                 timerTextView.setText("Seconds remaining: " + millisUntilFinished / 1000);
                 currentTimeValue.set(millisUntilFinished);
                 long timeLeft = millisUntilFinished / 1000;
+
 
                 if (timeLeft == 15) {
                     playAlertSound(R.raw.beep01);
@@ -160,14 +240,26 @@ public class GamePlayActivity extends Activity {
             public void onFinish() {
                 timerTextView.setText("Done!");
 
-                GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(0).build();
-                gameService.addGamePlay(gamePlay);
-                currentState = PLAY;
-                correctButton.setVisibility(View.INVISIBLE);
-                setNextPlayReadyState(gameService, gameId);
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         };
     }
+
+
+    private void setScore(int score) {
+        int gameId = gameService.getCurrentGameId();
+        GamePlay gamePlay = new GamePlay.Builder().gameId(gameId).movieId(nextMovieId).playerId(nextPlayerId).score(score).build();
+
+        gameService.addGamePlay(gamePlay);
+        currentState = PLAY;
+        setVisibility(View.INVISIBLE);
+        setNextPlayReadyState(gameService, gameId);
+    }
+
+
+    AtomicInteger score = new AtomicInteger(0);
+
 
     private void playAlertSound(int sound) {
         MediaPlayer mp = MediaPlayer.create(getBaseContext(), sound);
@@ -185,16 +277,30 @@ public class GamePlayActivity extends Activity {
 
     private void setNextPlayReadyState(GameService gameService, int gameId) {
         this.nextPlayerId = gameService.getNextPlayer(gameId);
+        setupNextPlay(gameService);
+    }
+    public void skipAndSetNextPlayReadyState(GameService gameService, int gameId){
+        this.nextPlayerId= gameService.skipToNextPlayer(gameId);
+        setupNextPlay(gameService);
+    }
+
+    private void setupNextPlay(GameService gameService) {
         String playerName = gameService.getPlayerName(nextPlayerId);
         final int teamId = gameService.getTeamId(nextPlayerId);
         String teamName = gameService.getTeamName(teamId);
         int roundNumber = gameService.getRoundNumber();
         teamNameTextView.setText(teamName);
+        teamNameTextView.setTextColor(Color.RED);
+        //teamNameTextView.setBackgroundColor(Color.LTGRAY);
         playerNameTextView.setText(playerName);
-        roundNumberTextView.setText("Round " + roundNumber + "");
+        //playerNameTextView.setBackgroundColor(Color.LTGRAY);
+        playerNameTextView.setTextColor(Color.RED);
+        roundNumberTextView.setText("Round " + roundNumber + ":    ");
+
         scoreBoardVIew.setText(gameService.getGameStatus());
         nextPlayButton.setBackgroundResource(R.drawable.play);
         movieNameTextView.setText("");
+        movieNameTextView.setTextColor(Color.RED);
     }
 
 
@@ -240,26 +346,6 @@ public class GamePlayActivity extends Activity {
 
         AlertDialog diaBox = AskOption();
         diaBox.show();
-/*
-Intent createTeamsIntent = getParentActivityIntent();
-
-        Bundle extras = getIntent().getExtras();
-        final String language = extras.getString("language");
-        final Integer difficultyLevel = extras.getInt("difficultyLevel");
-        final String timeIntervalForEachPlay = extras.getString("timeIntervalForEachPlay");
-        final String team1Name = extras.getString("team1Name");
-        final String team2Name = extras.getString("team2Name");
-
-        createTeamsIntent.putExtra("timeIntervalForEachPlay", timeIntervalForEachPlay);
-        createTeamsIntent.putExtra("language", language);
-        createTeamsIntent.putExtra("difficultyLevel", difficultyLevel);
-
-        createTeamsIntent.putExtra("team1Name", team1Name);
-        createTeamsIntent.putExtra("team2Name", team2Name);
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
-        super.onBackPressed();*/
     }
 
 

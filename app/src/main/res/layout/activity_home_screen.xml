@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/home_plain"
+    android:background="@drawable/background"
     tools:context=".HomeScreen">
 
     <LinearLayout
@@ -14,116 +14,133 @@
         android:padding="16dp"
         android:textStyle="italic">
 
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="serif"
-            android:text="Team 1"
-            android:textStyle="italic" />
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/team1Name"
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Team 1"
+                android:textStyle="italic" />
+
+            <EditText
+                android:id="@+id/team1Name"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:drawable/dialog_holo_light_frame"
+                android:hint="Enter Team 1 Name"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:drawable/dialog_holo_light_frame"
-            android:fontFamily="serif"
-            android:hint="Enter Team 1 Name"
-            android:textStyle="italic" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="serif"
-            android:text="Team 2"
-            android:textStyle="italic"
+            android:orientation="horizontal">
 
-            />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Team 2"
+                android:textStyle="italic"
 
-        <EditText
-            android:id="@+id/team2Name"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:drawable/dialog_holo_light_frame"
-            android:fontFamily="serif"
-            android:hint="Enter Team 2 Name"
-            android:textStyle="italic" />
+                />
 
+            <EditText
+                android:id="@+id/team2Name"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:drawable/dialog_holo_light_frame"
+                android:hint="Enter Team 2 Name"
+                android:textStyle="italic" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/spacer2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:divider="@drawable/padding"
             android:fontFamily="serif"
             android:text=""
             android:textStyle="italic" />
 
-        <TextView
-            android:id="@+id/languageTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="serif"
-            android:text="Select language"
-            android:textStyle="italic"
-
-            />
-
-        <Spinner
-            android:id="@+id/language"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@android:drawable/dialog_holo_light_frame"
-            android:fontFamily="serif"
-            android:textStyle="italic" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/LevelTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="serif"
-            android:text="Easy/Hard"
-            android:textStyle="italic"
+            <TextView
+                android:id="@+id/languageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="Language"
+                android:textStyle="italic"
 
-            />
+                />
 
-        <Spinner
-            android:id="@+id/difficultyLevel"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:drawable/dialog_holo_light_frame"
-            android:fontFamily="serif"
-            android:textStyle="italic" />
+            <Spinner
+                android:id="@+id/language"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/dialog_holo_light_frame"
+                android:fontFamily="serif"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/LevelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="Level"
+                android:textStyle="italic"
+
+                />
+
+            <Spinner
+                android:id="@+id/difficultyLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/dialog_holo_light_frame"
+                android:fontFamily="serif"
+                android:textStyle="italic" />
+
+        </LinearLayout>
 
 
-        <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        android:orientation="horizontal">
+
+    <TextView
             android:id="@+id/duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:divider="@drawable/padding"
             android:fontFamily="serif"
-            android:text="Select each round duration"
+            android:text="Duration"
             android:textStyle="italic" />
 
         <Spinner
             android:id="@+id/timeIntervalForEachPlay"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:background="@android:drawable/dialog_holo_light_frame"
             android:fontFamily="serif"
             android:textStyle="italic" />
 
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/spacer3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:divider="@drawable/padding"
-            android:fontFamily="serif"
-            android:text=""
-            android:textStyle="italic" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/existingGames"
@@ -141,25 +158,8 @@
             android:background="@android:drawable/dialog_holo_light_frame"
             android:fontFamily="serif"
             android:textStyle="italic" />
+    </LinearLayout>
 
-
-        <TextView
-            android:id="@+id/spacer4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:divider="@drawable/padding"
-            android:fontFamily="serif"
-            android:text=""
-            android:textStyle="italic" />
-
-        <Button
-            android:id="@+id/createGameButton"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/colors"
-            android:fontFamily="serif"
-            android:text="New Game"
-            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/spacer5"
@@ -170,6 +170,23 @@
             android:text=""
             android:textStyle="italic" />
 
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/createGameButton"
+            android:layout_width="175dp"
+            android:layout_height="50dp"
+            android:background="@drawable/colors"
+            android:fontFamily="serif"
+            android:text="New Game"
+            android:textStyle="italic" />
+
         <Button
             android:id="@+id/expressStartButton"
             android:layout_width="match_parent"
@@ -178,6 +195,7 @@
             android:fontFamily="serif"
             android:text="Express Start"
             android:textStyle="italic" />
+    </LinearLayout>
 
     </LinearLayout>
 

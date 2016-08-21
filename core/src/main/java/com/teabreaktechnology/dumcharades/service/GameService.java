@@ -28,6 +28,8 @@ public interface GameService extends Serializable {
 
     int getNextPlayer(int gameId);
 
+    int skipToNextPlayer(int gameId);
+
     String getPlayerName(int nextPlayerId);
 
     int getTeamId(int nextPlayerId);

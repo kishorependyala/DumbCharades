@@ -124,6 +124,12 @@ public class GameCache implements Serializable {
         return game.addPlayer(playerName);
     }
 
+    public int skipToNextPlayer(int gameId){
+        Game game = getGame();
+        return game.skipToNextPlayer(gameId);
+    }
+
+
     public int getNextPlayer(int gameId) {
         Game game = getGame();
         return game.getNextPlayer(gameId);

@@ -10,6 +10,7 @@ import com.teabreaktechnology.dumcharades.util.CommonConstants;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -82,7 +83,7 @@ public class Game implements DCDomainObject {
             Integer existingPlayerId = entry.getKey();
             String existingPlayerName = entry.getValue().getPlayerName();
             if (playerName.equalsIgnoreCase(existingPlayerName)) {
-                return CommonConstants.DUPLICATE_PLAYER;
+                return existingPlayerId;
             }
         }
         int playerId = playerIdCounter.getAndIncrement();
@@ -129,7 +130,19 @@ public class Game implements DCDomainObject {
 
     public int getNextPlayer(int gameId) {
         int nextTeamToPlay = getNextTeamToPlay(gameId);
+        Integer player = pickNextPlayer(gameId, nextTeamToPlay);
+        if (player != null) return player;
+        throw new IllegalStateException("Code should never come here");
+    }
 
+    public int skipToNextPlayer(int gameId){
+        int lastPlayedTeamId = this.lastPlayedTeamId;
+        int nextPlayer = pickNextPlayer(gameId, lastPlayedTeamId);
+
+        return nextPlayer;
+    }
+
+    private Integer pickNextPlayer(int gameId, int nextTeamToPlay) {
         Set<Player> players = teamPlayersMap.get(nextTeamToPlay);
 
         int numberOfRounds = 0;
@@ -168,7 +181,7 @@ public class Game implements DCDomainObject {
                 return player.getPlayerId();
             }
         }
-        throw new IllegalStateException("Code should never come here");
+        return null;
     }
 
     public String getPlayerName(int playerId) {
@@ -252,12 +265,14 @@ public class Game implements DCDomainObject {
 
     public String getGameStatus() {
         StringBuilder sb = new StringBuilder();
-        sb.append("ScoreBoard").append("\n");
+        sb.append("ScoreBoard").append("\n\n");
+        sb.append("Team\t\t\t\t\tScore\n");
+        sb.append("___________________\n");
         for (Map.Entry<Integer, List<GamePlay>> entry : gamePlayMap.entrySet()) {
             Integer teamId = entry.getKey();
             String teamName = getTeamName(teamId);
             Integer score = getScore(entry.getValue());
-            sb.append("Team ").append(teamName).append(" Score ").append(score).append("\n");
+            sb.append(teamName).append("\t\t\t\t\t").append(score).append("\n");
         }
         return sb.toString();
     }
